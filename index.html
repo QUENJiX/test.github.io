@@ -1,392 +1,267 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=FontName&display=swap" rel="stylesheet">
-<style>
-  h1 {
-    text-align: center;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    color: #ff6600;
-  }
-
-  table {
-    width: 100%;
-    margin: 0 auto;
-    border-collapse: collapse;
-    font-family: 'Pacifico', cursive;
-
-  }
-
-  td {
-    border: 1px solid #ff8800;
-    padding: 10px;
-  }
-
-  .progress {
-    margin:20px auto;
-    padding:0;
-    width:100%;
-    height:30px;
-    overflow:hidden;
-    background:#ffdd99;
-    border-radius:6px;
-  }
-
-  .progress-bar {
-    position:relative;
-    float:left;
-    min-width:0%;
-    height:100%;
-    background: #ff6600;
-    transition: all .3s linear;
-  }
-
-  .progress-percent {
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    margin:0;
-    font-family:tahoma,arial,helvetica;
-    font-size:12px;
-    color:white;
-  }
-
-  .subject {
-    font-weight: bold;
-    white-space: nowrap;
-  }
-
-  .paper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .checkbox-label input:checked + label{
-    color: rgb(255, 170, 90);
-    font-style: italic;
-    text-decoration: line-through;
-  }
-  /* Add media queries for smaller screens */
-  @media screen and (max-width: 600px) {
-  /* Adjust font size and margins for smaller screens */
-  h1 {
-    font-size: 24px;
-    margin: 10px;
-  }
-
-  table {
-    font-size: 12px;
-  }
-
-  td {
-    padding: 5px;
-  }
-
-  .checkbox-label label {
-    font-size: 10px;
-  }
-
-  /* Adjust the number of columns for smaller screens */
-  td {
-    width: 50%;
-  }
-
-  /* Center the progress bar on smaller screens */
-  .progress {
-    margin: 10px auto;
-  }
-}
-
-</style>
-
-<script>
-  // Function to initialize the checkboxes as unchecked and set up event listeners
-  function initializeCheckboxes() {
-    var checkboxes = document.getElementsByTagName("input");
-    for (var i = 0; i < checkboxes.length; i++) {
-      checkboxes[i].checked = false;
-      checkboxes[i].addEventListener("change", function() {
-        var subject = this.closest(".subject-row").id;
-        updateProgress(subject);
-        saveCheckboxStates();
-      });
-    }
-    loadCheckboxStates();
-    updateTotal();
-  }
-
-  // This function updates the progress bar and percentage based on the checked boxes
-  function updateProgress(subject) {
-    var row = document.getElementById(subject);
-    var paper1Progress = row.querySelector(".progress-bar-1");
-    var paper1Percent = row.querySelector(".progress-percent-1");
-    var paper1Checkboxes = row.querySelectorAll(".paper-1 input[type='checkbox']");
-    var paper2Progress = row.querySelector(".progress-bar-2");
-    var paper2Percent = row.querySelector(".progress-percent-2");
-    var paper2Checkboxes = row.querySelectorAll(".paper-2 input[type='checkbox']");
-    
-    var paper1Checked = 0;
-    for (var i = 0; i < paper1Checkboxes.length; i++) {
-      if (paper1Checkboxes[i].checked) {
-        paper1Checked++;
-      }
-    }
-    var paper1NewPercent = Math.round((paper1Checked / paper1Checkboxes.length) * 100);
-    paper1Progress.style.width = paper1NewPercent + "%";
-    paper1Percent.innerHTML = paper1NewPercent + "%";
-    
-    var paper2Checked = 0;
-    for (var i = 0; i < paper2Checkboxes.length; i++) {
-      if (paper2Checkboxes[i].checked) {
-        paper2Checked++;
-      }
-    }
-    var paper2NewPercent = Math.round((paper2Checked / paper2Checkboxes.length) * 100);
-    paper2Progress.style.width = paper2NewPercent + "%";
-    paper2Percent.innerHTML = paper2NewPercent + "%";
-    
-    updateTotal();
-  }
-
-  // This function updates the total completion based on all the subjects
-  function updateTotal() {
-    var totalProgress = document.getElementById("total-progress");
-    var totalPercent = 0;
-    var totalSubjects = 0;
-
-    var subjectRows = document.getElementsByClassName("subject-row");
-    for (var i = 0; i < subjectRows.length; i++) {
-      var paper1Progress = subjectRows[i].querySelector(".progress-bar-1");
-      var paper1Percent = parseInt(paper1Progress.style.width) || 0;
-      totalPercent += paper1Percent;
-
-      var paper2Progress = subjectRows[i].querySelector(".progress-bar-2");
-      var paper2Percent = parseInt(paper2Progress.style.width) || 0;
-      totalPercent += paper2Percent;
-
-      totalSubjects += 2;
-    }
-
-    var avgPercent = Math.round(totalPercent / totalSubjects);
-    totalProgress.style.width = avgPercent + "%";
-    totalProgress.nextElementSibling.innerHTML = avgPercent + "%";
-    localStorage.setItem("total-progress", avgPercent);
-  }
-
-  // Function to save the checkbox states to local storage as JSON
-  function saveCheckboxStates() {
-    var checkboxes = document.getElementsByTagName("input");
-    var checkboxStates = {};
-    for (var i = 0; i < checkboxes.length; i++) {
-      var checkbox = checkboxes[i];
-      var subject = checkbox.closest(".subject-row").id;
-      var paper = checkbox.closest(".paper").classList.contains("paper-1") ? "paper-1" : "paper-2";
-      var checkboxKey = subject + "-" + paper + "-" + i;
-      checkboxStates[checkboxKey] = checkbox.checked;
-    }
-    localStorage.setItem("checkboxStates", JSON.stringify(checkboxStates));
-  }
-
-  // Function to load the checkbox states and progress bar state from local storage
-  function loadCheckboxStates() {
-    var checkboxStates = localStorage.getItem("checkboxStates");
-    if (checkboxStates) {
-      checkboxStates = JSON.parse(checkboxStates);
-      var checkboxes = document.getElementsByTagName("input");
-      for (var i = 0; i < checkboxes.length; i++) {
-        var checkbox = checkboxes[i];
-        var subject = checkbox.closest(".subject-row").id;
-        var paper = checkbox.closest(".paper").classList.contains("paper-1") ? "paper-1" : "paper-2";
-        var checkboxKey = subject + "-" + paper + "-" + i;
-        var checkboxValue = checkboxStates[checkboxKey];
-        if (checkboxValue === true) {
-          checkbox.checked = true;
-        }
-      }
-    }
-  
-  // Load total progress from local storage and update the progress bars
-  var totalProgress = localStorage.getItem("total-progress");
-    if (totalProgress) {
-      var totalProgressElement = document.getElementById("total-progress");
-      totalProgressElement.style.width = totalProgress + "%";
-      totalProgressElement.nextElementSibling.innerHTML = totalProgress + "%";
-
-      // Update individual subject progress bars
-      var subjectRows = document.getElementsByClassName("subject-row");
-      for (var i = 0; i < subjectRows.length; i++) {
-        var paper1Progress = subjectRows[i].querySelector(".progress-bar-1");
-        var paper1Percent = subjectRows[i].querySelector(".progress-percent-1");
-        var paper2Progress = subjectRows[i].querySelector(".progress-bar-2");
-        var paper2Percent = subjectRows[i].querySelector(".progress-percent-2");
-
-        var paper1Checkboxes = subjectRows[i].querySelectorAll(".paper-1 input[type='checkbox']");
-        var paper1Checked = 0;
-        for (var j = 0; j < paper1Checkboxes.length; j++) {
-          if (paper1Checkboxes[j].checked) {
-            paper1Checked++;
-          }
-        }
-        var paper1NewPercent = Math.round((paper1Checked / paper1Checkboxes.length) * 100);
-        paper1Progress.style.width = paper1NewPercent + "%";
-        paper1Percent.innerHTML = paper1NewPercent + "%";
-
-        var paper2Checkboxes = subjectRows[i].querySelectorAll(".paper-2 input[type='checkbox']");
-        var paper2Checked = 0;
-        for (var j = 0; j < paper2Checkboxes.length; j++) {
-          if (paper2Checkboxes[j].checked) {
-            paper2Checked++;
-          }
-        }
-        var paper2NewPercent = Math.round((paper2Checked / paper2Checkboxes.length) * 100);
-        paper2Progress.style.width = paper2NewPercent + "%";
-        paper2Percent.innerHTML = paper2NewPercent + "%";
-      }
-    }
-  }
-
-  // Add an event listener to the window to initialize the checkboxes on load
-  window.addEventListener("load", initializeCheckboxes);
-
-</script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<h1>Syllabus Tracker with Checkbox and Progress Bar</h1>
-<table>
-<tr>
-<td style="background-color: #ffff99;"><b>Subject</b></td>
-<td style="background-color: #ffff99;"><b>Chapters/Topics</b></td>
-<td style="background-color: #ffff99;"><b>Progress Bar---->(0-100)%</b></td>
-<td style="background-color: #ffff99;"><b>Subject</b></td>
-<td style="background-color: #ffff99;"><b>Chapters/Topics</b></td>
-<td style="background-color: #ffff99;"><b>Progress Bar---->(0-100)%</b></td>
-</tr>
-<tr class="subject-row" id="physics">
-  <td class="subject" style="background-color: #ffdd99;">Physics-1</td>
-  <td class="paper paper-1">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-2: Vector </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-4: Newtonian Mechanics </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-5: Work, Energy and Power </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-6: Gravity </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-7: Structural Principle of Matter </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-8: Continuous Motion </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-10: Ideal Gas and Kinetic Theory  </label> </div>
-  </td>
-  <td>
-    <div class="progress" >
-      <div class="progress-bar progress-bar-1"><p class="progress-percent"><span class="progress-percent-1"></span></p></div>
-  </td></div>
-  <td class="subject" style="background-color: #ffdd99;">Physics-2</td>
-  <td class="paper paper-2">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-1: Tharmodynamics </label></div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-2: Static Electricity </label></div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-3: Current Electricity </label></div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-7: Physical Optics </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-8: Introduction to Modern Physics </label></div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-9: Atomic Structure and Nuclear Physics </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-10: Semiconductor and Electronics </label> </div>
-  </td>
-  <td>
-    <div class="progress">
-      <div class="progress-bar progress-bar-2"><p class="progress-percent"><span class="progress-percent-2"></span></p></div>
-  </td></div>
-</tr>
-<tr class="subject-row" id="chemistry">
-  <td class="subject" style="background-color: #ffdd99;">Chemistry-1</td>
-  <td class="paper paper-1">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-2: Qualitative Chemistry </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-3: Periodicity of the Elements </label></div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-4: Chemical Change </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-5: Applied Chemistry </label> </div>
-  </td>
-  <td>
-    <div class="progress">
-      <div class="progress-bar progress-bar-1"><p class="progress-percent"><span class="progress-percent-1"></span></p></div>
-  </td></div>
-  <td class="subject" style="background-color: #ffdd99;">Chemistry-2</td>
-  <td class="paper paper-2">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-1: Environmental Chemistry </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-2: Organic Chemistry </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-3: Quantitative Chemistry </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-4: Electrochemistry </label> </div>
-  </td>
-  <td>
-    <div class="progress">
-      <div class="progress-bar progress-bar-2"><p class="progress-percent"><span class="progress-percent-2"></span></p></div>
-  </td></div>
-</tr>
-<tr class="subject-row" id="maths">
-  <td class="subject" style="background-color: #ffdd99;">Math-1</td>
-  <td class="paper paper-1">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-1: Matrix </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-3: Straight Line </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-4: Circle </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-7: Trigonometry </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-9: Differentiation </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-10: Integration </label> </div>
-  </td>
-  <td>
-    <div class="progress">
-      <div class="progress-bar progress-bar-1"><p class="progress-percent"><span class="progress-percent-1"></span></p></div>
-  </td></div>
-  <td class="subject" style="background-color: #ffdd99;">Math-2</td>
-  <td class="paper paper-2">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-3: Complex Numbers </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-4: Polynomial </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-6: Conics </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-7: Inverse Trigonometry </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-8: Statics </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-9: Dynamics </label> </div>
-  </td>
-  <td>
-    <div class="progress">
-      <div class="progress-bar progress-bar-2"><p class="progress-percent"><span class="progress-percent-2"></span></p></div>
-  </td></div>
-</tr>
-<tr class="subject-row" id="biology">
-  <td class="subject" style="background-color: #ffdd99;">Biology-1</td>
-  <td class="paper paper-1">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-1: Cell and Cell structure </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-2: Cell Division </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-4: Virus </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-7: Gymnosperms and Angiosperms </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-8: Tissue and Tissue System </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-9: Plant Physiology </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-10: Bio-Technology </label> </div>
-  </td>
-  <td>
-    <div class="progress">
-      <div class="progress-bar progress-bar-1"><p class="progress-percent"><span class="progress-percent-1"></span></p></div>
-  </td></div>
-  <td class="subject" style="background-color: #ffdd99;">Biology-2</td>
-  <td class="paper paper-2">
-    <div class="checkbox-label"><input type="checkbox"> <label> U-1: Animal diversity and classification </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-2: Introduction to Life </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-3: HBS - Digestion and Absorption </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-4: HBS - Blood and Circulation </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-5: HBS - Breathing & Respiration </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-7: HBS - Movement </label> </div>
-    <div class="checkbox-label"><input type="checkbox"> <label> U-11: Evolution </label> </div>
-  </td>
-  <td>
-    <div class="progress">
-      <div class="progress-bar progress-bar-2"><p class="progress-percent"><span class="progress-percent-2"></span></p></div>
-  </td></div>
-</tr>
-<tr>
-  <td style="background-color: #ffff99;" colspan="1"><b>Total</b></td>
-  <td colspan="5">
-  <div class="progress">
-    <div class="progress-bar" id="total-progress"></div><span></span>
-  </td>
-</tr>
-</table>
+    <div class="container">
+        <h1>Semester Study Planner</h1>
+        <button class="reset-button" id="resetAll">Reset All Progress</button>
+
+        <!-- Bangladesh Studies -->
+        <div class="subject" id="bangladesh-studies">
+            <div class="subject-header">
+                <h2><i class="fas fa-book-open subject-icon"></i> Bangladesh Studies</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bangladesh"></div>
+                </div>
+            </div>
+            <div class="topics">
+                <ul>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
+                            Religions of Bangladesh and The Progress of Islam in the Sub-Continent
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
+                            Society and Culture of Bangladesh
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
+                            Bangladesh and International Affairs
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
+                            Political Parties in Bangladesh
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
+                            Election and Government [Short Questions]
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
+                            Liberation War and Its Aftermath; [Four National Leaders]
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
+                            July Revolution [Timeline]
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Social Process and Institutions -->
+        <div class="subject" id="social-process">
+            <div class="subject-header">
+                <h2><i class="fas fa-users subject-icon"></i> Social Process and Institutions</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-social"></div>
+                </div>
+            </div>
+            <div class="topics">
+                <ul>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
+                            Development of Sociology [Karl Marx, Pierre Bourdieu, Max Weber]
+                        </label>
+                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-1: p9-16; Chap-5: p112-113]</div>
+                        <div class="important">Important: Conflict Theory, Dramaturgical Approach</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
+                            Culture
+                        </label>
+                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-3]</div>
+                        <div class="important">Important: Cultural Imperialism</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
+                            Race
+                        </label>
+                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-10]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
+                            Social Movements: Analyzation
+                        </label>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
+                            Marxism: Dialectic Materialism & Economic Determinism
+                        </label>
+                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-14: p343]</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Mass Communication -->
+        <div class="subject" id="mass-communication">
+            <div class="subject-header">
+                <h2><i class="fas fa-bullhorn subject-icon"></i> Mass Communication: Structure and Process</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-mass"></div>
+                </div>
+            </div>
+            <div class="topics">
+                <ul>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Definition and Nature of Mass Communication
+                        </label>
+                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Mass Communication Process [Laswell's Communication Model]
+                        </label>
+                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1] & Internet</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Convergence
+                        </label>
+                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Critical/Cultural Studies of Mass Media
+                        </label>
+                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Functions of Media - Micro and Macro Analysis
+                        </label>
+                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-2]</div>
+                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-2]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Uses and Gratification Theory
+                        </label>
+                        <div class="source">Source: The Internet</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Features and History of Mass Media
+                        </label>
+                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap: 3-10]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Internet and WWW
+                        </label>
+                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-12]</div>
+                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-10]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Normative Theory
+                        </label>
+                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-13]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Magic Bullet Theory
+                        </label>
+                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-13]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
+                            Media Freedom, Regulation and Ethics
+                        </label>
+                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-14]</div>
+                    <!-- Additional mass communication topics -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Interpersonal Communication -->
+        <div class="subject" id="interpersonal-communication">
+            <div class="subject-header">
+                <h2><i class="fas fa-comments subject-icon"></i> Interpersonal and Group Communication</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-interpersonal"></div>
+                </div>
+            </div>
+            <div class="topics">
+                <ul>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="interpersonal"> 
+                            Foundation of Interpersonal communication (IC)
+                        </label>
+                        <div class="subtopics">
+                            <ul>
+                                <li>The Elements of IC</li>
+                                <li>The Benefits of Studying IC</li>
+                            </ul>
+                        </div>
+                        <div class="source">Source: The Interpersonal Communication Book by Joseph A. DeVito [Part-1]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="interpersonal"> 
+                            Culture and Interpersonal Communication (IC)
+                        </label>
+                        <div class="subtopics">
+                            <ul>
+                                <li>Acculturation, Ethnocentrism, Assimilation, Cultural Sensitivity</li>
+                                <li>Importance of Culture in IC</li>
+                                <li>Cultural Differencesm</li>
+                                <li>The Principles of Effective IC</li>
+                            </ul>
+                        </div>
+                        <div class="source">Source: The Interpersonal Communication Book by Joseph A. DeVito [Part-2]</div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="topic-checkbox" data-subject="interpersonal"> 
+                            Interpersonal Relationship
+                        </label>
+                        <div class="subtopics">
+                            <ul>
+                                <li>Relationship Stages</li>
+                                <li>Relationship Communication</li>
+                                <li>Relationship Theories</li>
+                            </ul>
+                        </div>
+                        <div class="source">Source: The Interpersonal Communication Book by Joseph A. DeVito [Part-3]</div>
+                    </li>
+                    <!-- Additional interpersonal communication topics -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- ICT Skills -->
+        <div class="subject" id="ict-skills">
+            <div class="subject-header">
+                <h2><i class="fas fa-laptop-code subject-icon"></i> ICT Skills for Media</h2>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-ict"></div>
+                </div>
+            </div>
+            <div class="topics">
+                <ul>
+                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> MS Word</label></li>
+                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Microsoft PowerPoint</label></li>
+                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Avro and Buoy Typing</label></li>
+                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Canva Poster Design and Presentation</label></li>
+                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> CV Writing [Canva and MS Word]</label></li>
+                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Excel</label></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
-<footer style="color: #ff6600;"><p><b>© Md Hasibul Islam</b></p></footer>
 </html>
