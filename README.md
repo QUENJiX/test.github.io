@@ -39,4 +39,4 @@ No installation required! This is a pure frontend application that runs directly
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/semester-study-planner.git
+   git clone https://github.com/QUENJiX/academix.github.io.git
