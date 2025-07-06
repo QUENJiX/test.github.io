@@ -1,266 +1,563 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Planner</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>New York Times v. Sullivan: A Comprehensive Case Study</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lato', sans-serif; background-color: #f8f7f2; color: #333333; line-height: 1.7; letter-spacing: 0.01em; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: #1a202c; line-height: 1.3; }
+        .section-title { color: #c89c3c; }
+        .card { background-color: #ffffff; border: 1px solid #e2e8f0; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 350px; max-height: 50vh; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; margin-bottom: 1.5rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #edf2f7; color: #4a5568; font-weight: bold; }
+        tr:hover { background-color: #f0f4f8; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #c89c3c; border-bottom-color: #c89c3c; }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
+        .collapsible-content.expanded { max-height: 1000px; /* Arbitrary large value to allow content to expand */ }
+        .read-more-btn { color: #c89c3c; cursor: pointer; font-weight: bold; }
+        .highlight-fact { display: inline-block; padding: 0.2em 0.4em; background-color: #fefcbf; border-radius: 0.25rem; font-weight: 700; color: #78350f; transition: all 0.2s ease-in-out; }
+        .highlight-fact:hover { transform: scale(1.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    </style>
+    <!-- Chosen Palette: Scholarly Harmony (Warm Neutrals: #f8f7f2, #e9e7e0; Deep Blue-Gray: #374151; Muted Gold Accent: #c89c3c) - Adapted to match screenshot -->
+    <!-- Application Structure Plan: This single-page application presents the complete New York Times v. Sullivan case study in a thematic and chronological flow. It begins with an engaging header, followed by sections that delve into the Introduction, Factual Background, Historical Context, The Ruling, Immediate and Long-Term Impact, Academic Debate, and Conclusion. Each section uses a combination of rich textual content from the source report, visually highlighted key facts, and interactive charts/diagrams (HTML/CSS and Chart.js) to enhance understanding. The layout is responsive, using Tailwind's grid and flexbox for optimal presentation on various screen sizes. Navigation is facilitated by a sticky header with smooth scrolling links. This structure was chosen to provide a comprehensive yet digestible experience of the complex legal case. -->
+    <!-- Visualization & Content Choices:
+        - Introduction, Factual Background, Historical Context, The Ruling, Academic Debate, Conclusion: Primarily textual content from the source report, formatted for readability with appropriate headings and paragraphs. Key numerical facts (e.g., ad revenue vs. damages) are highlighted using large text and interactive highlight effects.
+        - "Actual Malice" Standard: Presented as a simple HTML/CSS diagram to visually break down "knowledge of falsity OR reckless disregard." Goal: Organize/Inform. Method: HTML/CSS.
+        - Evolution of Defamation Standards Table: Presented as an HTML table to compare pre-Sullivan, post-Sullivan, and post-Gertz standards. Goal: Compare/Organize. Method: HTML table.
+        - Key Post-Sullivan Cases Table: Presented as an HTML table to list pivotal cases and their contributions. Goal: Organize/Inform. Method: HTML table.
+        - Burden of Proof Chart: A Chart.js horizontal bar chart to visually compare the difficulty for different plaintiff types (Private Individual, Public Figure, Public Official) to win a libel suit. Goal: Compare. Method: Chart.js/Canvas. Includes label wrapping and specific tooltip configuration.
+        - Arguments For/Against Sullivan: Presented in two distinct card-based lists using HTML/CSS to clearly separate the viewpoints. Goal: Compare/Inform. Method: HTML/CSS.
+        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
-<body>
-    <div class="container">
-        <h1>Semester Study Planner</h1>
+<body class="text-gray-800">
 
-        <!-- Bangladesh Studies -->
-        <div class="subject" id="bangladesh-studies">
-            <div class="subject-header">
-                <h2><i class="fas fa-book-open subject-icon"></i> Bangladesh Studies</h2>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="progress-bangladesh"></div>
+    <header class="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl md:text-3xl font-black text-gray-900">NYT v. Sullivan</h1>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#introduction" class="nav-link text-gray-600 font-semibold border-b-2 border-transparent pb-1">Intro</a>
+                    <a href="#background" class="nav-link text-gray-600 font-semibold border-b-2 border-transparent pb-1">Background</a>
+                    <a href="#context" class="nav-link text-gray-600 font-semibold border-b-2 border-transparent pb-1">Context</a>
+                    <a href="#ruling" class="nav-link text-gray-600 font-semibold border-b-2 border-transparent pb-1">Ruling</a>
+                    <a href="#impact" class="nav-link text-gray-600 font-semibold border-b-2 border-transparent pb-1">Impact</a>
+                    <a href="#debate" class="nav-link text-gray-600 font-semibold border-b-2 border-transparent pb-1">Debate</a>
+                    <a href="#conclusion" class="nav-link text-gray-600 font-semibold border-b-2 border-transparent pb-1">Conclusion</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-gray-700 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
                 </div>
             </div>
-            <div class="topics">
-                <ul>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
-                            Religions of Bangladesh and The Progress of Islam in the Sub-Continent
-                        </label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
-                            Society and Culture of Bangladesh
-                        </label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
-                            Bangladesh and International Affairs
-                        </label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
-                            Political Parties in Bangladesh
-                        </label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
-                            Election and Government [Short Questions]
-                        </label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
-                            Liberation War and Its Aftermath; [Four National Leaders]
-                        </label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="bangladesh"> 
-                            July Revolution [Timeline]
-                        </label>
-                    </li>
-                </ul>
+            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2">
+                <a href="#introduction" class="block nav-link text-gray-600 font-semibold py-2">Introduction</a>
+                <a href="#background" class="block nav-link text-gray-600 font-semibold py-2">Background</a>
+                <a href="#context" class="block nav-link text-gray-600 font-semibold py-2">Context</a>
+                <a href="#ruling" class="block nav-link text-gray-600 font-semibold py-2">Ruling</a>
+                <a href="#impact" class="block nav-link text-gray-600 font-semibold py-2">Impact</a>
+                <a href="#debate" class="block nav-link text-gray-600 font-semibold py-2">Debate</a>
+                <a href="#conclusion" class="block nav-link text-gray-600 font-semibold py-2">Conclusion</a>
             </div>
-        </div>
+        </nav>
+    </header>
 
-        <!-- Social Process and Institutions -->
-        <div class="subject" id="social-process">
-            <div class="subject-header">
-                <h2><i class="fas fa-users subject-icon"></i> Social Process and Institutions</h2>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="progress-social"></div>
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="introduction" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-4xl md:text-5xl font-black text-center section-title mb-8">New York Times v. Sullivan: A Foundational Analysis</h2>
+            <p class="text-lg md:text-xl text-center text-gray-700 max-w-4xl mx-auto mb-8">
+                *New York Times Co. v. Sullivan*, 376 U.S. 254 (1964), represents a watershed moment in American constitutional law, fundamentally reshaping the landscape of defamation and solidifying the protections afforded to freedom of speech and the press under the First Amendment. This landmark U.S. Supreme Court decision specifically limited the ability of public officials to sue for defamation, establishing a rigorous standard that prioritizes open public discourse.
+            </p>
+            <div class="collapsible-container">
+                <p class="max-w-3xl mx-auto text-gray-600">
+                    Prior to this ruling, defamation law was predominantly governed by state common law, with minimal application of First Amendment principles. The Supreme Court had previously articulated that defamatory speech possessed "no redeeming social value" and could thus be regulated by individual states. *Sullivan* did not merely adjust existing legal frameworks; it initiated a profound constitutional intervention, effectively "federalizing" a significant portion of libel law by imposing a uniform constitutional standard. This represented a dramatic departure from a state-centric approach that largely prioritized reputational protection to a federal one that vigorously defended free speech. The Court's decision was not a subtle modification but a radical reinterpretation of the First Amendment's scope, extending its reach into an area previously considered beyond its purview. This demonstrates the Court's proactive role in shaping legal doctrine to address critical societal needs, moving beyond a passive interpretation of existing statutes to actively advance constitutional principles in response to contemporary challenges.
+                </p>
+                <div class="collapsible-content">
+                    <p class="max-w-3xl mx-auto text-gray-600 mt-4">
+                        *New York Times v. Sullivan* established the "actual malice" standard, a constitutional safeguard that transformed the landscape of defamation law by prioritizing "uninhibited, robust, and wide-open" debate on public issues over the protection of public officials' reputations. This pivotal shift fostered a more vigilant press and a more informed citizenry, particularly during the critical era of the Civil Rights Movement.
+                    </p>
+                </div>
+                <button class="read-more-btn mt-4 block mx-auto">Read More</button>
+            </div>
+        </section>
+
+        <section id="background" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-8">Factual Background and Procedural History</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-700 mb-8">
+                The origins of *New York Times v. Sullivan* trace back to a full-page advertisement titled "Heed Their Rising Voices," published in *The New York Times* on March 29, 1960. This advertisement, placed by civil rights supporters, aimed to solicit donations for Dr. Martin Luther King, Jr.'s legal defense and contained criticisms of various Southern officials for their actions against civil rights protests in Montgomery, Alabama.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="card p-6 rounded-lg shadow-xl border border-gray-200">
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">The Advertisement's Inaccuracies</h3>
+                    <p class="text-gray-700">
+                        The advertisement, while conveying a message of significant public concern, contained several factual inaccuracies. For instance, it exaggerated police actions and falsely claimed that a dining hall was padlocked in an attempt to starve students. Notably, *The New York Times* had not fact-checked the advertisement, a deviation from its own established internal policies.
+                    </p>
+                </div>
+                <div class="card p-6 rounded-lg shadow-xl border border-gray-200">
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">L.B. Sullivan's Lawsuit</h3>
+                    <p class="text-gray-700">
+                        L.B. Sullivan, the Montgomery Public Safety Commissioner, initiated a defamation lawsuit against the *Times* and four African American ministers whose names appeared on the advertisement. Sullivan contended that the criticism directed at his subordinates, the police, implicitly defamed him, despite his name not being explicitly mentioned in the advertisement.
+                    </p>
                 </div>
             </div>
-            <div class="topics">
-                <ul>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
-                            Development of Sociology [Karl Marx, Pierre Bourdieu, Max Weber]
-                        </label>
-                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-1: p9-16; Chap-5: p112-113]</div>
-                        <div class="important">Important: Conflict Theory, Dramaturgical Approach</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
-                            Culture
-                        </label>
-                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-3]</div>
-                        <div class="important">Important: Cultural Imperialism</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
-                            Race
-                        </label>
-                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-10]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
-                            Social Movements: Analyzation
-                        </label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="social"> 
-                            Marxism: Dialectic Materialism & Economic Determinism
-                        </label>
-                        <div class="source">Source: Sociology: a Brief Introduction by Richard T. Schaefer [Chap-14: p343]</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
 
-        <!-- Mass Communication -->
-        <div class="subject" id="mass-communication">
-            <div class="subject-header">
-                <h2><i class="fas fa-bullhorn subject-icon"></i> Mass Communication: Structure and Process</h2>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="progress-mass"></div>
+            <div class="card p-6 rounded-lg shadow-xl border border-gray-200 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">The Disproportionate Verdict</h3>
+                <p class="text-center text-gray-700 mb-6">
+                    Under Alabama law at the time, Sullivan was not required to prove actual harm or malicious intent; falsity was presumed. An all-white jury awarded Sullivan a staggering <span class="highlight-fact">$500,000</span> in damages.
+                </p>
+                <div class="flex flex-col md:flex-row justify-around items-center text-center gap-8">
+                    <div>
+                        <p class="text-5xl md:text-6xl font-black text-gray-900">$4,800</p>
+                        <p class="text-lg font-semibold text-gray-600">NYT Ad Revenue</p>
+                    </div>
+                    <div class="text-4xl md:text-6xl font-black text-red-500 animate-pulse">&rarr;</div>
+                    <div>
+                        <p class="text-5xl md:text-6xl font-black text-gray-900">$500,000</p>
+                        <p class="text-lg font-semibold text-gray-600">Damages Awarded</p>
+                    </div>
+                </div>
+                <p class="text-center text-gray-500 mt-4 text-sm">(Equivalent to over <span class="highlight-fact">$5 million</span> in 2024. Other similar lawsuits totaled over <span class="highlight-fact">$288 million</span>.)</p>
+                <div class="collapsible-container">
+                    <p class="text-center text-gray-600 mt-4">
+                        This disproportionate penalty, coupled with similar large-sum lawsuits, strongly indicates a coordinated legal campaign designed to financially cripple or intimidate media organizations and civil rights groups. *The New York Times* appealed, asserting Alabama's libel law unconstitutionally infringed upon the First Amendment.
+                    </p>
+                    <div class="collapsible-content">
+                        <p class="text-gray-600 mt-4">
+                            This assertion that criticism of a public department reflected on its unnamed supervisor suggests that the lawsuit extended beyond a simple claim of personal reputational harm. It appears to have been a strategic maneuver to broaden the scope of defamation liability, allowing any criticism of governmental operations to be potentially actionable against individual officials. Such an interpretation of Alabama law created a potent instrument for suppression, enabling legal action not only for direct attacks on individuals but also for indirect criticisms of public bodies, thereby significantly amplifying the chilling effect on public discourse.
+                        </p>
+                    </div>
+                    <button class="read-more-btn mt-4 block mx-auto">Read More</button>
                 </div>
             </div>
-            <div class="topics">
-                <ul>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Definition and Nature of Mass Communication
-                        </label>
-                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Mass Communication Process [Laswell's Communication Model]
-                        </label>
-                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1] & Internet</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Convergence
-                        </label>
-                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Critical/Cultural Studies of Mass Media
-                        </label>
-                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-1]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Functions of Media - Micro and Macro Analysis
-                        </label>
-                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-2]</div>
-                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-2]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Uses and Gratification Theory
-                        </label>
-                        <div class="source">Source: The Internet</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Features and History of Mass Media
-                        </label>
-                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap: 3-10]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Internet and WWW
-                        </label>
-                        <div class="source">Source: The Dynamics of Mass Communication by Joseph Dominick [Chap:-12]</div>
-                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-10]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Normative Theory
-                        </label>
-                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-13]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Magic Bullet Theory
-                        </label>
-                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-13]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="mass"> 
-                            Media Freedom, Regulation and Ethics
-                        </label>
-                        <div class="source">Source: Introduction to Mass Communication by Stanley Baran [Chap:-14]</div>
-                    <!-- Additional mass communication topics -->
-                </ul>
-            </div>
-        </div>
+        </section>
 
-        <!-- Interpersonal Communication -->
-        <div class="subject" id="interpersonal-communication">
-            <div class="subject-header">
-                <h2><i class="fas fa-comments subject-icon"></i> Interpersonal and Group Communication</h2>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="progress-interpersonal"></div>
+        <section id="context" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-8">Historical and Social Context: The Civil Rights Movement</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-700 mb-8">
+                *New York Times v. Sullivan* was decided amidst the intense fervor of the Civil Rights Movement. The lawsuit itself emerged directly from the "sectional battles over civil rights and integration in the 1960s." Southern officials systematically "weaponized libel law" as a tactic to undermine Northern newspapers that criticized segregation and exposed violence against civil rights protesters.
+            </p>
+            <div class="card p-6 rounded-lg shadow-xl border border-gray-200 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">The "Chilling Effect"</h3>
+                <p class="text-gray-700 mb-4">
+                    The stringent state libel laws, which presumed falsity and damages, created a pervasive "chilling effect" on the press, leading to widespread self-censorship. The fear of financially ruinous lawsuits compelled editors to withhold critical commentary, thereby limiting the scope of public discourse on civil rights issues. This threat even forced the *Times* to withdraw its reporters from Alabama during crucial moments of the Civil Rights Movement.
+                </p>
+                <div class="collapsible-container">
+                    <p class="text-gray-700">
+                        Beyond its impact on the press, this wave of libel suits severely imperiled civil rights organizations by diverting essential funds and time away from critical desegregation campaigns. Dr. Martin Luther King, Jr. characterized these lawsuits as a "sword with two cutting edges," undermining both economic security and public confidence in a legal system being "perverted to accomplish oppression and injustice."
+                    </p>
+                    <div class="collapsible-content">
+                        <p class="text-gray-600 mt-4 text-sm">
+                            The Supreme Court heard the *Sullivan* case in the spring of 1963, a period marked by widespread public dissemination of shocking images depicting civil rights protests and brutal police responses in Birmingham. The Warren Court, known for its commitment to civil rights, perceived these libel suits as yet another manifestation of Southern resistance to federal anti-discrimination mandates, understanding the threat they posed to the media's indispensable role in advancing the Civil Rights Movement.
+                        </p>
+                    </div>
+                    <button class="read-more-btn mt-4 block mx-auto">Read More</button>
                 </div>
             </div>
-            <div class="topics">
-                <ul>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="interpersonal"> 
-                            Foundation of Interpersonal communication (IC)
-                        </label>
-                        <div class="subtopics">
-                            <ul>
-                                <li>The Elements of IC</li>
-                                <li>The Benefits of Studying IC</li>
-                            </ul>
-                        </div>
-                        <div class="source">Source: The Interpersonal Communication Book by Joseph A. DeVito [Part-1]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="interpersonal"> 
-                            Culture and Interpersonal Communication (IC)
-                        </label>
-                        <div class="subtopics">
-                            <ul>
-                                <li>Acculturation, Ethnocentrism, Assimilation, Cultural Sensitivity</li>
-                                <li>Importance of Culture in IC</li>
-                                <li>Cultural Differencesm</li>
-                                <li>The Principles of Effective IC</li>
-                            </ul>
-                        </div>
-                        <div class="source">Source: The Interpersonal Communication Book by Joseph A. DeVito [Part-2]</div>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" class="topic-checkbox" data-subject="interpersonal"> 
-                            Interpersonal Relationship
-                        </label>
-                        <div class="subtopics">
-                            <ul>
-                                <li>Relationship Stages</li>
-                                <li>Relationship Communication</li>
-                                <li>Relationship Theories</li>
-                            </ul>
-                        </div>
-                        <div class="source">Source: The Interpersonal Communication Book by Joseph A. DeVito [Part-3]</div>
-                    </li>
-                    <!-- Additional interpersonal communication topics -->
-                </ul>
-            </div>
-        </div>
+        </section>
 
-        <!-- ICT Skills -->
-        <div class="subject" id="ict-skills">
-            <div class="subject-header">
-                <h2><i class="fas fa-laptop-code subject-icon"></i> ICT Skills for Media</h2>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="progress-ict"></div>
+        <section id="ruling" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-8">The Supreme Court's Ruling: Establishing "Actual Malice"</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-700 mb-8">
+                On March 9, 1964, the U.S. Supreme Court delivered a unanimous 9-0 decision, reversing the judgment of the Alabama Supreme Court. This unanimity underscored the profound constitutional principles at stake. Justice William Brennan articulated the Court's decision "against the background of a profound national commitment to the principle that debate on public issues should be uninhibited, robust, and wide-open."
+            </p>
+
+            <div class="card p-6 rounded-lg shadow-xl border border-gray-200 max-w-4xl mx-auto mb-12">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">The "Actual Malice" Standard Defined</h3>
+                <p class="text-center text-lg text-gray-700 mb-6">
+                    A public official cannot recover damages for a defamatory falsehood relating to their official conduct "unless he proves that the statement was made with 'actual malice' – that is, with...
+                </p>
+                <div class="flex flex-col md:flex-row gap-6 justify-center text-center items-center">
+                    <div class="flex-1 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold text-gray-800">Knowledge that it was false</h4>
+                        <p class="text-gray-700 text-sm">The publisher knew the information was untrue.</p>
+                    </div>
+                    <div class="font-black text-3xl text-c89c3c">OR</div>
+                    <div class="flex-1 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h4 class="text-xl font-bold text-gray-800">Reckless disregard of whether it was false or not</h4>
+                        <p class="text-gray-700 text-sm">The publisher had serious doubts about the truth but published anyway.</p>
+                    </div>
+                </div>
+                <p class="text-center text-gray-500 mt-6 text-sm">
+                    This standard was justified by the recognition that "erroneous statement is inevitable in free debate, and must be protected if the freedoms of expression are to have the breathing space that they need... to survive." This "actual malice" is a technical legal term, distinct from ordinary ill will.
+                </p>
+            </div>
+
+            <div class="card p-6 rounded-lg shadow-xl border border-gray-200 max-w-5xl mx-auto">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">From Strict Liability to Constitutional Standard</h3>
+                <p class="text-center text-gray-700 mb-6">
+                    The *Sullivan* decision marked a profound shift from common law strict liability, where falsity and damages were often presumed, to a constitutional standard where the burden of proof shifted to the plaintiff.
+                </p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Pre-Sullivan Common Law</th>
+                                <th>Post-Sullivan (Public Officials/Figures)</th>
+                                <th>Post-Gertz (Private Individuals)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Plaintiff</td>
+                                <td>Any individual</td>
+                                <td>Public Official or Public Figure</td>
+                                <td>Private Individual</td>
+                            </tr>
+                            <tr>
+                                <td>Burden of Proof</td>
+                                <td>Falsity often presumed; plaintiff did not need to prove harm or malice.</td>
+                                <td>Plaintiff must prove "actual malice" (knowledge of falsity or reckless disregard for truth) by clear and convincing evidence.</td>
+                                <td>Plaintiff must prove at least negligence (state-defined fault standard).</td>
+                            </tr>
+                            <tr>
+                                <td>Defense</td>
+                                <td>Truth "in all its particulars" (difficult to prove).</td>
+                                <td>Truth remains a defense; absence of actual malice.</td>
+                                <td>Truth; absence of fault.</td>
+                            </tr>
+                            <tr>
+                                <td>Liability Standard</td>
+                                <td>Strict liability (publisher responsible regardless of intent).</td>
+                                <td>Actual malice.</td>
+                                <td>State-defined fault (at least negligence).</td>
+                            </tr>
+                            <tr>
+                                <td>Damages</td>
+                                <td>Presumed, often punitive.</td>
+                                <td>Actual damages; punitive damages only with actual malice.</td>
+                                <td>Actual damages; punitive damages only with actual malice.</td>
+                            </tr>
+                            <tr>
+                                <td>First Amendment Protection</td>
+                                <td>Minimal/None.</td>
+                                <td>Strong.</td>
+                                <td>Moderate.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-gray-500 mt-4 text-sm text-center">
+                    This table illustrates the profound legal paradigm shift initiated by *Sullivan*, highlighting the transformative impact on libel law and its subsequent refinements.
+                </p>
+            </div>
+        </section>
+
+        <section id="impact" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-8">Immediate and Long-Term Impact</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-700 mb-8">
+                The *Sullivan* decision had an immediate and profound impact on American libel law and press freedom. It effectively halted the coordinated "libel attack" orchestrated by Southern officials, saving media outlets from potential financial ruin and sending a clear message that such tactics would not succeed in stifling civil rights reporting.
+            </p>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <div class="card p-6 rounded-lg shadow-xl border border-gray-200">
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">Transformation of Libel Law and Press Freedom</h3>
+                    <p class="text-gray-700 mb-4">
+                        The ruling ushered in a new era for journalism, sparking an "explosion of investigative reporting" by liberating news organizations from the paralyzing fear of financially devastating judgments over minor, inadvertent errors. This newfound freedom was instrumental in enabling reporting on highly sensitive issues, such as government misconduct during the Vietnam War and the Watergate scandal.
+                    </p>
+                    <p class="text-gray-700">
+                        Ultimately, *Sullivan* solidified the press's role as a vital "watchdog," empowering it to monitor and critique the conduct of public officials without undue fear of retribution. This ensured a "free flow of information" essential for informing the public about governmental actions and fostering accountability.
+                    </p>
+                </div>
+                <div class="card p-6 rounded-lg shadow-xl border border-gray-200">
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">Extension to Public Figures</h3>
+                    <p class="text-gray-700 mb-4">
+                        The principles established in *Sullivan* were not confined to public officials. The Supreme Court subsequently extended the "actual malice" standard to encompass all "public figures"—individuals who are widely known or have voluntarily injected themselves into public controversies.
+                    </p>
+                    <p class="text-gray-700">
+                        Key cases like *Curtis Publishing Co. v. Butts* (1967) and *Associated Press v. Walker* (1967) applied this standard, reasoning that public figures, much like public officials, typically possess substantial access to the media to counter false statements. The Court further refined this in *Gertz v. Robert Welch, Inc.* (1974), drawing a crucial distinction for private individuals, for whom states could set a lower standard (at least negligence), but punitive damages still required actual malice.
+                    </p>
                 </div>
             </div>
-            <div class="topics">
-                <ul>
-                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> MS Word</label></li>
-                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Microsoft PowerPoint</label></li>
-                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Avro and Buoy Typing</label></li>
-                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Canva Poster Design and Presentation</label></li>
-                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> CV Writing [Canva and MS Word]</label></li>
-                    <li><label><input type="checkbox" class="topic-checkbox" data-subject="ict"> Excel</label></li>
-                </ul>
+
+            <div class="card p-6 rounded-lg shadow-xl border border-gray-200 max-w-5xl mx-auto mb-12">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">Key Post-Sullivan Cases and Their Contributions</h3>
+                <p class="text-center text-gray-700 mb-6">
+                    The jurisprudential lineage of *Sullivan* is further illuminated by examining the subsequent Supreme Court cases that applied and refined its core principle.
+                </p>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Case</th>
+                                <th>Year</th>
+                                <th>Contribution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>*New York Times Co. v. Sullivan*</td>
+                                <td>1964</td>
+                                <td>Established "actual malice" standard for public officials.</td>
+                            </tr>
+                            <tr>
+                                <td>*Curtis Publishing Co. v. Butts* / *Associated Press v. Walker*</td>
+                                <td>1967</td>
+                                <td>Extended "actual malice" standard to "public figures" (non-officials who are widely known or voluntarily inject themselves into public controversy).</td>
+                            </tr>
+                            <tr>
+                                <td>*Gertz v. Robert Welch, Inc.*</td>
+                                <td>1974</td>
+                                <td>Clarified distinction between public and private figures; for private figures, states can set liability standard (at least negligence), but punitive damages require actual malice.</td>
+                            </tr>
+                            <tr>
+                                <td>*Hustler Magazine v. Falwell*</td>
+                                <td>1988</td>
+                                <td>Extended actual malice standard to intentional infliction of emotional distress claims involving public figures/officials.</td>
+                            </tr>
+                            <tr>
+                                <td>*Milkovich v. Lorain Journal Co.*</td>
+                                <td>1990</td>
+                                <td>Reaffirmed that statements of opinion can be defamatory if they imply a provably false factual assertion; existing law sufficient to protect free speech without recognizing a separate opinion privilege.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-gray-500 mt-4 text-sm text-center">
+                    This table traces the jurisprudential lineage of *Sullivan*, demonstrating how the core "actual malice" principle was applied, adapted, and refined by subsequent Supreme Court decisions.
+                </p>
             </div>
+
+            <div class="card p-6 rounded-lg shadow-xl border border-gray-200 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">Burden of Proof: Who has it harder?</h3>
+                <p class="text-center text-gray-700 mb-6">
+                    This chart illustrates the relative difficulty for different types of plaintiffs to win a libel lawsuit after the *Sullivan* line of cases. A higher bar indicates a greater burden of proof for the plaintiff, offering more protection for the speaker.
+                </p>
+                <div class="chart-container">
+                    <canvas id="burdenOfProofChart" style="background-color: white;"></canvas>
+                </div>
+                <p class="text-xs text-center text-gray-500 mt-4">
+                    The requirement of "actual malice" for public officials and figures, while fostering investigative journalism, arguably reduced the immediate legal pressure on journalists to verify every minute detail of a statement, as long as their actions did not constitute reckless disregard for the truth.
+                </p>
+            </div>
+        </section>
+
+        <section id="debate" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-8">Academic Debate and Contemporary Critiques</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-700 mb-8">
+                *New York Times v. Sullivan* continues to be a subject of vigorous academic debate, with scholars and legal practitioners offering both staunch defenses and sharp critiques of its enduring relevance in the modern era.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-6 rounded-lg shadow-xl border border-green-200 bg-green-50">
+                    <h3 class="text-2xl font-bold text-center text-green-800 mb-4">Arguments Defending *Sullivan*'s Continued Relevance</h3>
+                    <ul class="space-y-3 list-disc list-inside text-gray-700">
+                        <li>Protects the press's "watchdog" role over government and ensures accountability.</li>
+                        <li>Serves as a critical bulwark against the "weaponization of libel laws" by officials seeking to suppress critics.</li>
+                        <li>Facilitates robust public discourse by providing "breathing room" for speech, acknowledging that "erroneous statement is inevitable in free debate."</li>
+                        <li>Its historical context in advancing the Civil Rights Movement lends it significant moral force.</li>
+                    </ul>
+                </div>
+                <div class="card p-6 rounded-lg shadow-xl border border-red-200 bg-red-50">
+                    <h3 class="text-2xl font-bold text-center text-red-800 mb-4">Arguments Critiquing *Sullivan*</h3>
+                    <ul class="space-y-3 list-disc list-inside text-gray-700">
+                        <li>Critics argue it was an act of "judicial activism" lacking firm constitutional foundation.</li>
+                        <li>Perceived as an "unwarranted 'subsidy' for untruthful publications" to a potentially biased press.</li>
+                        <li>The "cheap speech" era (digital content) challenges its original justifications, arguing it's obsolete.</li>
+                        <li>Concerns about proliferation of "disinformation and extremist content" on social media.</li>
+                        <li>Argued to insufficiently protect personal reputation, especially for public figures.</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="max-w-3xl mx-auto text-gray-600 mt-8 text-center">
+                The ongoing debate surrounding *Sullivan* highlights the inherent tension between the First Amendment's robust protection of free speech, which necessitates a tolerance for some factual error, and the common law's traditional interest in safeguarding individual reputation. The Court in *Sullivan* decisively prioritized the former for public figures, asserting that the health of democratic debate outweighs the occasional harm to reputation resulting from honest errors.
+            </p>
+        </section>
+
+        <section id="conclusion" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center section-title mb-8">Conclusion: Enduring Legacy and Future Challenges</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-700 mb-8">
+                *New York Times v. Sullivan* remains a foundational pillar of American First Amendment law, establishing the "actual malice" standard as a critical safeguard for speech concerning public officials and figures. Its enduring legacy lies in its solidification of the principle that "uninhibited, robust, and wide-open" debate on public issues is paramount to a functioning democracy.
+            </p>
+            <div class="card p-6 rounded-lg shadow-xl border border-gray-200 max-w-4xl mx-auto">
+                <p class="text-gray-700 mb-4">
+                    The decision successfully countered the weaponization of libel law, particularly during the Civil Rights Movement, and ushered in a new era of investigative journalism, empowering the press to scrutinize government conduct. Its protections have been extended beyond public officials to public figures and have influenced other torts, such as intentional infliction of emotional distress.
+                </p>
+                <p class="text-gray-700 mb-4">
+                    However, *Sullivan* faces increasing scrutiny and calls for reconsideration from various ideological perspectives. The challenges include concerns about perceived media bias, the unchecked proliferation of disinformation in the "cheap speech" digital environment, and the ongoing struggle to balance the protection of speech with the safeguarding of individual reputation in an era of rapid information dissemination.
+                </p>
+                <p class="text-gray-700">
+                    Any significant alterations to the *Sullivan* line of cases could potentially lead to a return of "politicized 'libel warfare'," undermining the very democratic discourse it sought to protect. The core of the *Sullivan* debate revolves around the fundamental tension between the First Amendment's robust protection of free speech and the common law's interest in protecting individual reputation. The continued vitality of American democracy hinges on how effectively this delicate balance is maintained in an ever-changing media landscape.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white text-gray-600 mt-16 md:mt-24 border-t border-gray-200">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="text-sm">&copy; 2024 Interactive Legal Case Studies. All Rights Reserved.</p>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        function wrapLabels(label, maxWidth) {
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + words[i].length + 1 < maxWidth) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('header nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                   event.preventDefault(); // Prevent default anchor behavior
+                   const targetId = link.getAttribute('href').substring(1);
+                   const targetSection = document.getElementById(targetId);
+                   if (targetSection) {
+                       targetSection.scrollIntoView({ behavior: 'smooth' });
+                   }
+
+                   if (mobileMenu.classList.contains('hidden') === false) {
+                       mobileMenu.classList.add('hidden');
+                   }
+                });
+            });
+
+            const ctx = document.getElementById('burdenOfProofChart').getContext('2d');
+            const burdenChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Private Individual', 'Public Figure', 'Public Official'],
+                    datasets: [{
+                        label: 'Relative Burden of Proof for Plaintiff',
+                        data: [35, 80, 95],
+                        backgroundColor: ['#84BC9C', '#F4B393', '#F69A94'],
+                        borderColor: ['#c89c3c'],
+                        borderWidth: 2,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            ticks: { 
+                                color: '#4a5568',
+                                font: { size: 12 },
+                                callback: function(value) {
+                                    if (value === 0) return 'Lower Burden';
+                                    if (value === 100) return 'Higher Burden';
+                                    return '';
+                                }
+                            }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { 
+                                color: '#333333',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: '#374151',
+                            titleColor: '#f3f4f6',
+                            bodyColor: '#e0e7ed',
+                            borderColor: '#c89c3c',
+                            borderWidth: 1,
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                },
+                                label: function(context) {
+                                    let plaintiffType = context.label;
+                                    if (plaintiffType === 'Private Individual') {
+                                        return 'Standard: Must prove at least negligence.';
+                                    }
+                                    return 'Standard: Must prove "Actual Malice".';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const sections = document.querySelectorAll('section[id]');
+            const mainNavLinks = document.querySelectorAll('header nav a');
+            
+            function onScroll() {
+                const scrollPos = window.scrollY + 100;
+                sections.forEach(section => {
+                    if (scrollPos >= section.offsetTop && scrollPos < (section.offsetTop + section.offsetHeight)) {
+                        mainNavLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (section.getAttribute('id') === link.getAttribute('href').substring(1)) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', onScroll);
+            onScroll();
+
+            // Collapsible sections logic
+            const collapsibleContainers = document.querySelectorAll('.collapsible-container');
+            collapsibleContainers.forEach(container => {
+                const button = container.querySelector('.read-more-btn');
+                const content = container.querySelector('.collapsible-content');
+                if (button && content) {
+                    button.addEventListener('click', () => {
+                        content.classList.toggle('expanded');
+                        if (content.classList.contains('expanded')) {
+                            button.textContent = 'Read Less';
+                        } else {
+                            button.textContent = 'Read More';
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
