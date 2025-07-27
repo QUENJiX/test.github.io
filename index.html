@@ -67,209 +67,365 @@
 
     <div class="code-container">
         <button id="copy-btn" class="copy-button" onclick="copyCode()">Copy</button>
-        <pre><code id="code-block">
-#include <stdio.h>
-#include <math.h>
+        <pre><code id="code-block">// =============================================================================
+// ||                  COMPREHENSIVE C SNIPPET TEMPLATE                     ||
+// ||      For Common Problems on 1D Arrays, Strings, and 2D Arrays         ||
+// =============================================================================
 
-#define TRUE 1
-#define FALSE 0
+#include <stdio.h>    // For standard input/output (printf, scanf)
+#include <string.h>   // For string functions (strlen)
+#include <ctype.h>    // For character functions (tolower, isalpha, etc.)
+#include <limits.h>   // For INT_MAX and INT_MIN (useful for finding min/max)
 
-//--------------------------------------------------------------------------------------
-// Section 1: Digit Manipulation (Lab 2)
-//--------------------------------------------------------------------------------------
+// =================== FUNCTION PROTOTYPES (Good Practice) =====================
+// You can declare your functions here.
+int countOccurrences(int arr[], int size, int key);
+void findFirstAndLast(int arr[], int size, int key, int* first, int* last);
 
-int sumDigits(int num) {
-    int sum = 0;
-    int temp = (num < 0) ? -num : num;
-    if (temp == 0) return 0;
-    while (temp > 0) {
-        sum += temp % 10;
-        temp /= 10;
-    }
-    return sum;
+
+// =============================================================================
+// ||                            MAIN FUNCTION                                ||
+// =============================================================================
+int main() {
+    // This is the main entry point.
+    // Copy snippets from the sections below into here.
+    
+    printf("Template is running. Uncomment a section to test it.\n");
+
+    return 0; // Indicates successful execution
 }
 
-int reverseNumber(int num) {
-    int reversed = 0;
-    int temp = num;
-    while (temp != 0) {
-        if (reversed > __INT_MAX__ / 10 || reversed < (-__INT_MAX__ - 1) / 10) return 0;
-        reversed = reversed * 10 + (temp % 10);
-        temp /= 10;
-    }
-    return reversed;
+
+// =============================================================================
+// ||                         SECTION 1: 1D ARRAYS                            ||
+// =============================================================================
+
+/*
+// --- 1.1: Declare, Get Size, Read Input, and Print 1D Array ---
+int n;
+printf("Enter size of the array: ");
+scanf("%d", &n);
+int arr[n]; // Variable-Length Array
+
+printf("Enter %d elements:\n", n);
+for (int i = 0; i < n; i++) {
+    scanf("%d", &arr[i]);
 }
 
-int countDigits(int num) {
+printf("The array elements are: ");
+for (int i = 0; i < n; i++) {
+    printf("%d ", arr[i]);
+}
+printf("\n");
+*/
+
+/*
+// --- 1.2: Find Sum and Average of 1D Array Elements ---
+float arr[n]; // Use float for decimal values
+float sum = 0.0;
+float average = 0.0;
+// (Assumes array 'arr' of size 'n' is already filled)
+for (int i = 0; i < n; i++) {
+    sum += arr[i];
+}
+if (n > 0) {
+    average = sum / n;
+}
+printf("Sum = %.2f, Average = %.2f\n", sum, average);
+*/
+
+/*
+// --- 1.3: Find the Largest and Smallest Element in a 1D Array ---
+int largest = INT_MIN;  // Start with the smallest possible integer
+int smallest = INT_MAX; // Start with the largest possible integer
+// (Assumes array 'arr' of size 'n' is already filled)
+for (int i = 0; i < n; i++) {
+    if (arr[i] > largest) {
+        largest = arr[i];
+    }
+    if (arr[i] < smallest) {
+        smallest = arr[i];
+    }
+}
+printf("Largest: %d, Smallest: %d\n", largest, smallest);
+*/
+
+/*
+// --- 1.4: Find 2nd Largest and 2nd Smallest ---
+int largest = INT_MIN, second_largest = INT_MIN;
+int smallest = INT_MAX, second_smallest = INT_MAX;
+// (Assumes array 'arr' of size 'n' is already filled and n >= 2)
+for (int i = 0; i < n; i++) {
+    if (arr[i] > largest) {
+        second_largest = largest;
+        largest = arr[i];
+    } else if (arr[i] > second_largest && arr[i] != largest) {
+        second_largest = arr[i];
+    }
+    if (arr[i] < smallest) {
+        second_smallest = smallest;
+        smallest = arr[i];
+    } else if (arr[i] < second_smallest && arr[i] != smallest) {
+        second_smallest = arr[i];
+    }
+}
+printf("2nd Largest: %d, 2nd Smallest: %d\n", second_largest, second_smallest);
+*/
+
+
+/*
+// --- 1.5: Count Even and Odd Numbers ---
+int even_count = 0;
+int odd_count = 0;
+// (Assumes array 'arr' of size 'n' is already filled)
+for (int i = 0; i < n; i++) {
+    if (arr[i] % 2 == 0) {
+        even_count++;
+    } else {
+        odd_count++;
+    }
+}
+printf("Even numbers: %d, Odd numbers: %d\n", even_count, odd_count);
+*/
+
+/*
+// --- 1.6: Search for a Key (Find All Indexes) ---
+int key;
+printf("Enter the search key: ");
+scanf("%d", &key);
+printf("Key %d found at indexes: ", key);
+int found = 0;
+// (Assumes array 'arr' of size 'n' is already filled)
+for (int i = 0; i < n; i++) {
+    if (arr[i] == key) {
+        printf("%d ", i);
+        found = 1;
+    }
+}
+if (!found) {
+    printf("None");
+}
+printf("\n");
+*/
+
+/*
+// --- 1.7: Delete an Element (All Occurrences) by Shifting In-Place ---
+int key_to_delete;
+printf("Enter element to delete: ");
+scanf("%d", &key_to_delete);
+int new_size = 0;
+// (Assumes array 'arr' of size 'n' is already filled)
+for (int i = 0; i < n; i++) {
+    if (arr[i] != key_to_delete) {
+        arr[new_size] = arr[i];
+        new_size++;
+    }
+}
+n = new_size; // Update the size of the array
+// Now print the array with the new size 'n'
+*/
+
+
+// =============================================================================
+// ||                      SECTION 2: STRINGS (char arrays)                   ||
+// =============================================================================
+
+/*
+// --- 2.1: Read and Print a String ---
+// NOTE: gets() is unsafe. fgets() is the recommended, safer alternative.
+char str[101]; // +1 for the null terminator '\0'
+printf("Enter a string: ");
+fgets(str, sizeof(str), stdin);
+// fgets reads the newline character, so let's remove it
+str[strcspn(str, "\n")] = 0; 
+printf("You entered: %s\n", str);
+*/
+
+/*
+// --- 2.2: Iterate Through a String and Get Length ---
+int length = 0;
+// (Assumes 'str' is already filled)
+for (int i = 0; str[i] != '\0'; i++) {
+    // Process each character str[i] here
+    length++;
+}
+printf("Manual length: %d\n", length);
+printf("strlen() length: %zu\n", strlen(str)); // Using string.h
+*/
+
+/*
+// --- 2.3: Count Vowels, Consonants, Digits, Spaces ---
+int vowels = 0, consonants = 0, digits = 0, spaces = 0;
+// (Assumes 'str' is already filled)
+for (int i = 0; str[i] != '\0'; i++) {
+    char ch = tolower(str[i]); // Convert to lowercase for easy checking
+    if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+        vowels++;
+    } else if (isalpha(ch)) { // Check if it's an alphabet character
+        consonants++;
+    } else if (isdigit(ch)) { // Check if it's a digit
+        digits++;
+    } else if (isspace(ch)) { // Check if it's a whitespace
+        spaces++;
+    }
+}
+printf("Vowels: %d, Consonants: %d\n", vowels, consonants);
+*/
+
+/*
+// --- 2.4: Check for Palindrome ---
+int is_palindrome = 1; // Assume true
+int left = 0;
+int right = strlen(str) - 1;
+while (left < right) {
+    if (str[left] != str[right]) {
+        is_palindrome = 0; // It's not a palindrome
+        break;
+    }
+    left++;
+    right--;
+}
+if (is_palindrome) {
+    printf("The string is a palindrome.\n");
+} else {
+    printf("The string is not a palindrome.\n");
+}
+*/
+
+/*
+// --- 2.5: Count Frequency of Each Character ---
+int freq[26] = {0}; // For a-z
+// (Assumes 'str' is already filled)
+for (int i = 0; str[i] != '\0'; i++) {
+    if (isalpha(str[i])) {
+        freq[tolower(str[i]) - 'a']++;
+    }
+}
+printf("Character frequencies:\n");
+for (int i = 0; i < 26; i++) {
+    if (freq[i] > 0) {
+        printf("%c: %d\n", 'a' + i, freq[i]);
+    }
+}
+*/
+
+// =============================================================================
+// ||                        SECTION 3: 2D ARRAYS (MATRICES)                  ||
+// =============================================================================
+
+/*
+// --- 3.1: Declare, Read, and Print a 2D Array ---
+int r, c;
+printf("Enter rows and columns: ");
+scanf("%d %d", &r, &c);
+int matrix[r][c];
+
+printf("Enter matrix elements:\n");
+for (int i = 0; i < r; i++) {
+    for (int j = 0; j < c; j++) {
+        scanf("%d", &matrix[i][j]);
+    }
+}
+
+printf("The matrix is:\n");
+for (int i = 0; i < r; i++) {
+    for (int j = 0; j < c; j++) {
+        printf("%d\t", matrix[i][j]);
+    }
+    printf("\n");
+}
+*/
+
+/*
+// --- 3.2: Matrix Addition or Scalar Multiplication ---
+int A[r][c], B[r][c], Result[r][c];
+// (Assumes A and B are read from the user)
+for (int i = 0; i < r; i++) {
+    for (int j = 0; j < c; j++) {
+        // For addition: Result[i][j] = A[i][j] + B[i][j];
+        // For scalar product (e.g., 5*A): Result[i][j] = 5 * A[i][j];
+    }
+}
+// Then print the Result matrix
+*/
+
+/*
+// --- 3.3: Matrix Transpose ---
+int transpose[c][r];
+// (Assumes matrix[r][c] is filled)
+for (int i = 0; i < r; i++) {
+    for (int j = 0; j < c; j++) {
+        transpose[j][i] = matrix[i][j];
+    }
+}
+// Now print the 'transpose' matrix which has dimensions c x r
+*/
+
+/*
+// --- 3.4: Accessing Diagonals, Triangles, and Borders ---
+// (Assumes matrix[n][n] is filled for most of these)
+for (int i = 0; i < r; i++) {
+    for (int j = 0; j < c; j++) {
+        // if (i == j) -> Main diagonal
+        // if (i + j == n - 1) -> Reverse diagonal (for n x n matrix)
+        // if (j < i) -> Lower left triangle
+        // if (j > i) -> Upper right triangle
+        // if (i == 0 || i == r - 1 || j == 0 || j == c - 1) -> Border elements
+    }
+}
+*/
+
+/*
+// --- 3.5: Calculate Determinant of a 3x3 Matrix ---
+int A[3][3];
+// (Assumes A is filled)
+long det = A[0][0] * (A[1][1] * A[2][2] - A[2][1] * A[1][2]) -
+           A[0][1] * (A[1][0] * A[2][2] - A[2][0] * A[1][2]) +
+           A[0][2] * (A[1][0] * A[2][1] - A[2][0] * A[1][1]);
+printf("Determinant = %ld\n", det);
+*/
+
+
+// =============================================================================
+// ||                          SECTION 4: FUNCTIONS                           ||
+// =============================================================================
+
+/*
+// --- 4.1: Function that takes a 1D array and returns a value ---
+// Function definition:
+int countOccurrences(int arr[], int size, int key) {
     int count = 0;
-    int temp = (num < 0) ? -num : num;
-    if (temp == 0) return 1;
-    while (temp > 0) {
-        count++;
-        temp /= 10;
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == key) {
+            count++;
+        }
     }
     return count;
 }
+// How to call in main:
+// int occurrences = countOccurrences(my_array, n, search_key);
+*/
 
-
-//--------------------------------------------------------------------------------------
-// Section 2: Divisors, Factors, GCD, and LCM (Lab 2, 3)
-//--------------------------------------------------------------------------------------
-
-int sumProperDivisors(int num) {
-    if (num <= 1) return 0;
-    int sum = 1;
-    for (int i = 2; i * i <= num; i++) {
-        if (num % i == 0) {
-            sum += i;
-            if (i * i != num) sum += num / i;
+/*
+// --- 4.2: Function that modifies arguments using pointers (pass-by-reference) ---
+// Function definition:
+void findFirstAndLast(int arr[], int size, int key, int* first, int* last) {
+    *first = -1;
+    *last = -1;
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == key) {
+            if (*first == -1) {
+                *first = i;
+            }
+            *last = i;
         }
     }
-    return sum;
 }
-
-int findGCD(int a, int b) {
-   int temp;
-   while (b != 0) {
-       temp = b;
-       b = a % b;
-       a = temp;
-   }
-   return a;
-}
-
-int findLCM(int a, int b) {
-    if (a == 0 || b == 0) return 0;
-    return (int)(((long long)a * b) / findGCD(a, b));
-}
-
-
-//--------------------------------------------------------------------------------------
-// Section 3: Number Property Checkers (Lab 2, 4)
-//--------------------------------------------------------------------------------------
-
-int isPrime(int num) {
-    if (num <= 1) return FALSE;
-    for (int i = 2; i * i <= num; i++) {
-        if (num % i == 0) return FALSE;
-    }
-    return TRUE;
-}
-
-int isPalindrome(int num) {
-    if (num < 0) return FALSE;
-    return (num == reverseNumber(num));
-}
-
-int isPerfectNumber(int num) {
-    if (num <= 1) return FALSE;
-    return (num == sumProperDivisors(num));
-}
-
-
-//--------------------------------------------------------------------------------------
-// Section 4: Combinatorics & Powers (Lab 1, 3, 4)
-//--------------------------------------------------------------------------------------
-
-long long factorial(int n) {
-    if (n < 0) return 0;
-    long long fact = 1;
-    for (int i = 1; i <= n; i++) {
-        fact *= i;
-    }
-    return fact;
-}
-
-long long calculate_nPr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    long long result = 1;
-    for (int i = n; i > n - r; i--) {
-        result *= i;
-    }
-    return result;
-}
-
-long long calculate_nCr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    if (r > n / 2) r = n - r;
-    long long result = 1;
-    for (int i = 1; i <= r; i++) {
-        result = result * (n - i + 1) / i;
-    }
-    return result;
-}
-
-double customPower(double base, int exp) {
-    double result = 1.0;
-    int is_negative_exp = exp < 0;
-    if(is_negative_exp) exp = -exp;
-
-    for (int i = 0; i < exp; i++) {
-        result *= base;
-    }
-    return is_negative_exp ? 1.0 / result : result;
-}
-
-
-//--------------------------------------------------------------------------------------
-// Section 5: Number System Conversions & Rounding (Lab 3, 4)
-//--------------------------------------------------------------------------------------
-
-long long binaryToDecimal(long long binaryNum) {
-    long long decimalNum = 0;
-    int i = 0;
-    while (binaryNum != 0) {
-        decimalNum += (binaryNum % 10) * pow(2, i);
-        binaryNum /= 10;
-        i++;
-    }
-    return decimalNum;
-}
-
-long long decimalToBinary(int decimalNum) {
-    long long binaryNum = 0;
-    long long i = 1;
-    while (decimalNum != 0) {
-        binaryNum += (decimalNum % 2) * i;
-        decimalNum /= 2;
-        i *= 10;
-    }
-    return binaryNum;
-}
-
-double customRound(double num, int d) {
-    double multiplier = pow(10, d);
-    return round(num * multiplier) / multiplier;
-}
-
-// =====================================================================================
-//                              MAIN CONTROL PROGRAM
-// =====================================================================================
-int main() {
-
-    int n1, n2;
-    long long bin_in;
-    double d1;
-
-    printf("Enter number: "); 
-    scanf("%d", &n1); 
-    printf("Result: %d\n", sumDigits(n1)); 
-            
-    printf("Enter two numbers: "); 
-    scanf("%d %d", &n1, &n2); 
-    printf("Result: %d\n", findGCD(n1, n2)); 
-            
-    printf("Enter number: "); 
-    scanf("%d", &n1); 
-    printf(isPrime(n1) ? "Result: TRUE\n" : "Result: FALSE\n"); 
-
-    printf("Enter base and exponent: "); scanf("%lf %d", &d1, &n1); printf("Result: %lf\n", customPower(d1, n1)); 
-    printf("Enter binary number: "); scanf("%lld", &bin_in); printf("Result: %lld\n", binaryToDecimal(bin_in)); 
-    printf("Enter decimal number: "); scanf("%d", &n1); printf("Result: %lld\n", decimalToBinary(n1)); 
-    printf("Enter number and decimal places: "); scanf("%lf %d", &d1, &n1); printf("Result: %.*f\n", n1, customRound(d1, n1)); 
-
-    return 0;
-}
+// How to call in main:
+// int first_idx, last_idx;
+// findFirstAndLast(my_array, n, search_key, &first_idx, &last_idx);
+// printf("First: %d, Last: %d\n", first_idx, last_idx);
+*/
 </code></pre>
     </div>
 
