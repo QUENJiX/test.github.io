@@ -13,34 +13,35 @@
 - Function Documentation
 - Program Flowcharts
 - File I/O and Data Persistence
-- User Guide
-- Administrator Guide
+- User Guide & Administrator Guide
+- Navigating the System: Screen by Screen
 - Limitations and Future Improvements
 - Development Notes
 
 ## Project Overview
 ### Introduction
 
-JHS-CinePlex is a comprehensive Command Line Interface (CLI)-based movie ticket booking system developed in C. This system provides a complete solution for cinema management, allowing administrators to manage movies and showtimes while customers can browse available movies, purchase tickets, and view their purchase history.
+JHS-CinePlex is a comprehensive Command Line Interface (CLI)-based movie ticket booking system developed in C. This system provides a complete solution for cinema management, allowing administrators to manage movies and showtimes while customers can browse available movies, purchase tickets, and view their purchase history. It features a visually enhanced interface with colors and formatted tables for a professional and user-friendly experience.
 
 ### System Objectives
 
-- Provide a user-friendly interface for both administrators and customers
-- Enable efficient movie management (add, edit, remove)
-- Facilitate secure user authentication and registration
-- Streamline ticket purchasing process
-- Maintain persistent data storage for movies, users, and transactions
-- Generate purchase reports and history tracking
+- Provide a user-friendly and visually appealing interface for both administrators and customers.
+- Enable efficient movie management (add, edit, remove).
+- Facilitate secure user authentication and registration.
+- Streamline the ticket purchasing process.
+- Maintain persistent data storage for movies, users, and transactions.
+- Generate purchase reports and history tracking.
 
 ### Key Features
 
-- **Dual Role System:** Administrator and Customer access levels
-- **User Management:** Registration and login functionality
-- **Movie Management:** Add, edit, remove movies with showtimes and pricing
-- **Ticket Booking:** Browse movies and purchase tickets with seat availability tracking
-- **Purchase History:** Track individual and all purchases
-- **Data Persistence:** Save and load data from text files
-- **Default Data:** Pre-populated with sample movies for demonstration
+- **Dual Role System:** Administrator and Customer access levels.
+- **User Management:** Registration and login functionality.
+- **Movie Management:** Add, edit, remove movies with showtimes and pricing.
+- **Enhanced Visual Interface:** Features styled headers, color-coded feedback, and aligned tables for improved readability.
+- **Ticket Booking:** Browse movies and purchase tickets with seat availability tracking.
+- **Purchase History:** Track individual and all purchases in a clean, tabular format.
+- **Data Persistence:** Save and load data from text files.
+- **Default Data:** Pre-populated with sample movies for demonstration.
 
 ### Technology Stack
 
@@ -56,28 +57,28 @@ The system follows a modular architecture with clear separation of concerns:
 
 ### Module Breakdown
 1.  **Main Module**
-    - Entry point of the application
-    - Handles main menu navigation
-    - Coordinates between admin and user modules
-    - Manages program termination and data saving
+    - Entry point of the application.
+    - Handles main menu navigation.
+    - Coordinates between admin and user modules.
+    - Manages program termination and data saving.
 
 2.  **Administrator Module**
-    - Authentication for admin users
-    - Movie management operations
-    - Purchase report generation
-    - System oversight capabilities
+    - Authentication for admin users.
+    - Movie management operations.
+    - Purchase report generation.
+    - System oversight capabilities.
 
 3.  **User Module**
-    - Customer authentication and registration
-    - Movie browsing and ticket purchasing
-    - Personal purchase history viewing
-    - User account management
+    - Customer authentication and registration.
+    - Movie browsing and ticket purchasing.
+    - Personal purchase history viewing.
+    - User account management.
 
 4.  **Data Persistence Module**
-    - File I/O operations for all data types
-    - Data serialization and deserialization
-    - Default data initialization
-    - Error handling for file operations
+    - File I/O operations for all data types.
+    - Data serialization and deserialization.
+    - Default data initialization.
+    - Error handling for file operations.
 
 ## Data Structures
 ### Core Data Structures
@@ -329,14 +330,34 @@ The system maintains parallel arrays where the index correlates related data:
     - Includes various genres and showtimes
 
 ### Utility Functions
-#### `Press_Enter_to_Continue()`
-- **Purpose:** Pauses program execution until user presses Enter
-- **Parameters:** None
-- **Returns:** `void`
-- **Functionality:**
-    - Clears input buffer
-    - Waits for Enter key press
-    - Used throughout system for user-friendly pacing
+
+#### UI Helper Functions
+
+##### `clear_screen()`
+- **Purpose:** Clears the terminal screen in a cross-platform way.
+- **Functionality:** Uses `system("cls")` on Windows and `system("clear")` on other systems (Linux, macOS).
+
+##### `print_header(const char* title)`
+- **Purpose:** Prints a standardized, centered, and colored header.
+- **Functionality:** Takes a title string and prints it centered within a double-line border, using cyan color for emphasis.
+
+##### `print_success(const char* message)`
+- **Purpose:** Displays a formatted success message.
+- **Functionality:** Prints the message in green, prefixed with `[SUCCESS]`.
+
+##### `print_error(const char* message)`
+- **Purpose:** Displays a formatted error message.
+- **Functionality:** Prints the message in red, prefixed with `[ERROR]`.
+
+##### `print_warning(const char* message)`
+- **Purpose:** Displays a formatted informational or warning message.
+- **Functionality:** Prints the message in yellow, prefixed with `[INFO]`.
+
+#### Other Utility Functions
+
+##### `Press_Enter_to_Continue()`
+- **Purpose:** Pauses program execution until the user presses Enter.
+- **Functionality:** Clears the input buffer and waits for an Enter key press, allowing users to read information before proceeding.
 
 ## Program Flowcharts
 
@@ -690,211 +711,283 @@ The system ensures data consistency through:
 - **Comprehensive Saving:** All data files are saved before program termination.
 - **Initialization Order:** Data is loaded in the correct dependency order (users → movies → tickets).
 
-## User Guide
-### Getting Started
-#### System Requirements
-- C compiler (GCC, Clang, or any ANSI C compliant compiler)
-- Text-based terminal or command prompt
-- File system access for data persistence
-- Approximately 1MB of disk space for data files
+## Navigating the System: Screen by Screen
 
-#### Installation
-1.  Save the source code as `cinema_system.c`.
-2.  Compile the program:
-    ```bash
-    gcc cinema_system.c -o cinema_system
+This guide provides a visual walkthrough of every screen in the JHS-CinePlex system, explaining its purpose and user interactions.
+
+---
+### 1. Main Menu
+This is the first screen you see. It's the central hub for accessing either the Administrator or Customer sections.
+
+**Screen:**
+```
+================================================================================
+                               Welcome to JHS-CinePlex
+================================================================================
+
+   [1] Admin Login
+   [2] Customer Login / Register
+   [3] Exit
+
+>> Enter your choice:
+```
+**Interaction:**
+-   Enter `1` to proceed to the Admin Login screen.
+-   Enter `2` to go to the Customer Portal.
+-   Enter `3` to save all data and exit the application.
+-   Any other input will show an error message.
+
+---
+### 2. Customer Portal
+This menu allows customers to either log in to an existing account or register a new one.
+
+**Screen:**
+```
+================================================================================
+                                Customer Portal
+================================================================================
+
+   [1] Login
+   [2] Register
+   [3] Back to Main Menu
+
+>> Enter your choice:
+```
+**Interaction:**
+-   Enter `1` to access the Customer Login screen.
+-   Enter `2` to begin the New User Registration process.
+-   Enter `3` to return to the Main Menu.
+
+---
+### 3. Customer Login
+Here, existing users can enter their credentials to access their accounts.
+
+**Screen:**
+```
+================================================================================
+                                 Customer Login
+================================================================================
+
+Enter Username: john_doe
+Enter Password: password123
+```
+**Possible Outcomes:**
+-   **Successful Login:**
     ```
-3.  Run the program:
-    ```bash
-    ./cinema_system
+    [SUCCESS] Login successful!
+    ```
+    You will then be taken to the Customer Menu.
+-   **Failed Login:**
+    ```
+    [ERROR] Invalid username or password.
+    ```
+    You will be returned to the previous menu.
+
+---
+### 4. New User Registration
+New users can create an account here. Usernames must be unique.
+
+**Screen:**
+```
+================================================================================
+                             New User Registration
+================================================================================
+
+Enter a new username: new_user
+Enter a new password: new_pass
+```
+**Possible Outcomes:**
+-   **Successful Registration:**
+    ```
+    [SUCCESS] Registration successful! You can now log in.
+    ```
+    You will be returned to the Customer Portal to log in.
+-   **Username Taken:**
+    ```
+    [ERROR] Username already exists. Please try another.
+    ```
+    You will be returned to the Customer Portal.
+
+---
+### 5. Customer Menu
+After a successful login, this is the main dashboard for customers.
+
+**Screen:**
+```
+================================================================================
+                               Welcome, john_doe!
+================================================================================
+
+   [1] View Available Movies
+   [2] Purchase Tickets
+   [3] View My Purchase History
+   [4] Logout
+
+>> Enter your choice:
+```
+**Interaction:**
+-   Enter `1` to see a list of all available movies.
+-   Enter `2` to start the ticket purchasing process.
+-   Enter `3` to view your personal purchase history.
+-   Enter `4` to log out and return to the Main Menu.
+
+---
+### 6. View Available Movies
+This screen displays all movies in the system in a clean, tabular format.
+
+**Screen:**
+```
+================================================================================
+                               Available Movies
+================================================================================
+No.  Title                          Genre              Price      Seats
+----------------------------------------------------------------------------
+1    Hereditary                     Horror             200        50
+2    The Notebook                   Romantic           200        10
+3    Boss Baby                      Family / Comedy    200        50
+4    Harry Potter and the Goblet... Fantasy            500        [INFO] SOLD OUT
+5    Chander Pahar                  Adventure          500        50
+```
+**Interaction:**
+-   This is a view-only screen. Review the movie details.
+-   Press `Enter` to return to the previous menu (Customer or Admin).
+
+---
+### 7. Purchase Tickets
+This multi-step process allows users to select a movie and purchase tickets.
+
+**Screen (Step 1: Selection):**
+```
+================================================================================
+                               Purchase Tickets
+================================================================================
+   [1] Hereditary (Horror) - Seats: 50
+   [2] The Notebook (Romantic) - Seats: 10
+   ...
+
+   [0] Back to Main Menu
+
+>> Enter movie number:
+```
+**Screen (Step 2: Confirmation):**
+```
+Selected: 'Hereditary' | Available Seats: 50
+>> Enter number of tickets to buy: 2
+
+--- Purchase Summary ---
+   Movie:   Hereditary
+   Tickets: 2
+   Total:   400
+------------------------
+>> Confirm purchase? (Y/N):
+```
+**Possible Outcomes:**
+-   **Purchase Confirmed:**
+    ```
+    [SUCCESS] Purchase successful!
+    ```
+-   **Purchase Cancelled:**
+    ```
+    [INFO] Purchase cancelled.
+    ```
+-   **Invalid Input:**
+    ```
+    [ERROR] Invalid ticket count.
+    [ERROR] Sorry, this movie is SOLD OUT.
     ```
 
-### Main Menu Navigation
-When you start the program, you'll see the main menu:
+---
+### 8. View My Purchase History
+This screen shows a table of all tickets purchased by the logged-in user.
+
+**Screen (With History):**
 ```
-========================================
-        Welcome to JHS-CinePlex
-========================================
-   1. Admin Login
-   2. Customer Login / Register
-   3. Exit
-========================================
-Enter your choice: 
+================================================================================
+                         Purchase History for john_doe
+================================================================================
+Date         Movie Title                    Tickets    Amount
+-----------------------------------------------------------------
+2024-01-15   Hereditary                     2          400
+-----------------------------------------------------------------
+Total Spent: 400
 ```
-
-**Options:**
-- **Admin Login:** For system administrators to manage movies and view reports.
-- **Customer Login / Register:** For customers to access movie browsing and ticket purchasing.
-- **Exit:** Safely exit the program and save all data.
-
-### Customer Guide
-#### Registration
-1.  From the main menu, select option `2`.
-2.  Choose "Register" from the customer portal.
-3.  Enter a unique username (3-50 characters).
-4.  Enter a password (3-50 characters).
-5.  System will confirm successful registration.
-
-***Note:*** *Usernames must be unique. If your chosen username exists, you'll need to choose another.*
-
-#### Login
-1.  From the main menu, select option `2`.
-2.  Choose "Login" from the customer portal.
-3.  Enter your registered username.
-4.  Enter your password.
-5.  System will authenticate and grant access.
-
-#### Customer Menu
-After successful login, you'll see:
+**Screen (No History):**
 ```
-========================================
-        Welcome, [username]!
-========================================
-   1. View Available Movies
-   2. Purchase Tickets
-   3. View My Purchase History
-   4. Logout
-========================================
+...
+-----------------------------------------------------------------
+[INFO] You have not made any purchases yet.
 ```
+**Interaction:**
+-   View-only screen. Press `Enter` to return.
 
-#### Viewing Movies
-1.  Select option `1` from the customer menu.
-2.  Browse all available movies with details:
-    - Movie title and genre
-    - Showtime schedule
-    - Ticket price
-    - Available seats (or "SOLD OUT" if unavailable)
+---
+### 9. Administrator Login
+This screen is for authorized administrators to access the management panel.
 
-#### Purchasing Tickets
-1.  Select option `2` from the customer menu.
-2.  Choose a movie from the list by entering its number.
-3.  Enter the number of tickets you want to purchase.
-4.  Review the purchase summary.
-5.  Confirm with 'Y' to complete purchase or 'N' to cancel.
-
-***Important:***
-- You cannot purchase tickets for sold-out movies.
-- You cannot purchase more tickets than available seats.
-- Each purchase reduces the available seat count.
-
-#### Viewing Purchase History
-1.  Select option `3` from the customer menu.
-2.  View all your past purchases with:
-    - Purchase date
-    - Movie title
-    - Number of tickets
-    - Amount paid
-    - Total spending summary
-
-## Administrator Guide
-### Admin Login
-1.  From the main menu, select option `1`.
-2.  Enter admin username:
-    - `Hasib`
-    - `Jaima`
-    - `Shimu`
-3.  Enter corresponding password:
-    - `hasib123`
-    - `jaima123`
-    - `shimu123`
-
-### Admin Menu
-After successful authentication, you'll see:
+**Screen:**
 ```
-========================================
-              Admin Panel
-========================================
-   1. Add New Movie
-   2. Edit Existing Movie
-   3. Remove Movie
-   4. View All Movies
-   5. View All User Purchases
-   6. Logout
-========================================
+================================================================================
+                              Administrator Login
+================================================================================
+
+Enter Admin Username: Hasib
+Enter Admin Password: hasib123
 ```
+**Possible Outcomes:**
+-   **Successful Login:**
+    ```
+    [SUCCESS] Login successful.
+    Welcome, Admin Hasib!
+    ```
+    You will be taken to the Admin Panel.
+-   **Failed Login:**
+    ```
+    [ERROR] Incorrect username or password. Access denied.
+    ```
 
-#### Adding Movies
-1.  Select option `1` from the admin menu.
-2.  Enter movie details:
-    - Movie title (up to 200 characters)
-    - Movie genre (up to 100 characters)
-    - Showtime (e.g., "08:00 PM - 10:00 PM")
-    - Ticket price (integer value)
-    - Available seats (integer value)
-3.  System confirms successful addition.
+---
+### 10. Admin Panel
+The central dashboard for all administrative tasks.
 
-#### Editing Movies
-1.  Select option `2` from the admin menu.
-2.  Choose a movie from the numbered list.
-3.  Edit available fields:
-    - Price (press Enter to keep current value)
-    - Available seats (press Enter to keep current value)
-4.  System confirms successful update.
+**Screen:**
+```
+================================================================================
+                                   Admin Panel
+================================================================================
 
-#### Removing Movies
-1.  Select option `3` from the admin menu.
-2.  Choose a movie from the numbered list.
-3.  Confirm removal.
-4.  System removes movie and all associated data.
+   [1] Add New Movie
+   [2] Edit Existing Movie
+   [3] Remove Movie
+   [4] View All Movies
+   [5] View All User Purchases
+   [6] Logout
 
-***Note:*** *Removing a movie does not affect existing ticket purchases in the history.*
+>> Enter your choice:
+```
+**Interaction:**
+-   Options `1`, `2`, `3` lead to movie management screens.
+-   Option `4` shows the same "View Available Movies" table.
+-   Option `5` shows the "All Purchase History" table.
+-   Option `6` logs out and returns to the Main Menu.
 
-#### Viewing All Movies
-1.  Select option `4` from the admin menu.
-2.  View complete movie listing with all details.
-3.  Press Enter to return to admin menu.
+---
+### 11. View All Purchase History (Admin)
+This provides a system-wide overview of all transactions from all users.
 
-#### Viewing All Purchases
-1.  Select option `5` from the admin menu.
-2.  View comprehensive purchase report including:
-    - All ticket purchases
-    - Purchaser usernames
-    - Purchase dates
-    - Transaction details
-3.  Press Enter to return to admin menu.
+**Screen:**
+```
+================================================================================
+                             All Purchase History
+================================================================================
+ID    Username             Movie Title                    Tickets    Amount
+------------------------------------------------------------------------------
+#1    john_doe             Hereditary                     2          400
+#2    jane_smith           The Notebook                   1          200
+```
+**Interaction:**
+-   View-only screen. Press `Enter` to return to the Admin Panel.
 
-### Common Operations
-#### Navigating Menus
-- All menus use numbered options.
-- Enter the number corresponding to your choice.
-- Use option `0` or "Back" to return to previous menu.
-- Press Enter after making selections.
-
-#### Data Entry Guidelines
-- **Usernames:** 3-50 characters, alphanumeric recommended.
-- **Passwords:** 3-50 characters, any characters allowed.
-- **Movie Titles:** Up to 200 characters.
-- **Genres:** Up to 100 characters.
-- **Showtimes:** Format like "08:00 PM - 10:00 PM".
-- **Prices:** Integer values (e.g., 200 for $2.00).
-- **Seats:** Integer values representing available seats.
-
-#### Error Handling
-- System provides clear error messages for invalid inputs.
-- Invalid choices return to the same menu.
-- Data validation prevents incorrect entries.
-- File operations include basic error checking.
-
-### Troubleshooting
-#### Common Issues
-- **Problem:** Program won't start.
-  - **Solution:** Ensure you have proper compilation permissions and disk space.
-- **Problem:** Data not saved between sessions.
-  - **Solution:** Ensure program files have write permissions in the current directory.
-- **Problem:** Cannot login with correct credentials.
-  - **Solution:** Check for typos, ensure Caps Lock is off, verify registration was successful.
-- **Problem:** Movies not displaying.
-  - **Solution:** Check if `movie_list.txt` exists and has proper permissions.
-- **Problem:** Cannot purchase tickets.
-  - **Solution:** Verify movie has available seats and you're entering valid quantities.
-
-#### Data Recovery
-If data files become corrupted:
-1.  Delete the corrupted file(s).
-2.  Restart the program.
-3.  System will create default data for movies.
-4.  Re-add lost data as needed.
-
+---
 ## Limitations and Future Improvements
 ### Current Limitations
 #### 1. Security Limitations
@@ -913,7 +1006,6 @@ If data files become corrupted:
 - **CLI Only:** No graphical user interface.
 - **No Search Functionality:** Cannot search for specific movies or users.
 - **No Filtering:** Cannot filter movies by genre, price, or availability.
-- **Basic Navigation:** Limited menu navigation options.
 
 #### 4. Business Logic Limitations
 - **Simple Pricing:** No dynamic pricing, discounts, or promotions.
@@ -1009,7 +1101,7 @@ void search_movies(const char *search_term) {
 - Add search functionality for movies and users.
 - Implement filtering by genre, price range, and availability.
 - Create enhanced menu system with keyboard shortcuts.
-- Add color coding and improved formatting.
+- Add even more advanced color coding and formatting.
 
 #### 4. Business Logic Enhancements
 **Proposed discount system:**
@@ -1111,7 +1203,6 @@ void generate_sales_report(time_t start_date, time_t end_date) {
 - **Performance:** Search optimization and data caching.
 
 #### Low Priority
-- **UI Enhancements:** Improved formatting and color coding.
 - **Advanced Features:** Reporting system and notifications.
 - **Integration:** Payment processing and email services.
 
@@ -1153,20 +1244,26 @@ cinema_system/
 
 #### Function Grouping
 The code is organized by functionality:
-- **Main Functions:** Program control flow
-- **Authentication:** User and admin login/registration
-- **Administration:** Movie management and reporting
-- **User Operations:** Movie browsing and ticket purchasing
-- **Data Persistence:** File I/O operations
-- **Utilities:** Helper functions and input handling
+- **UI Helpers:** A group of functions at the top manage the visual presentation.
+- **Main Functions:** Program control flow.
+- **Authentication:** User and admin login/registration.
+- **Administration:** Movie management and reporting.
+- **User Operations:** Movie browsing and ticket purchasing.
+- **Data Persistence:** File I/O operations.
+- **Utilities:** Helper functions and input handling.
 
 ### Coding Standards
 #### Naming Conventions
-- **Functions:** `Pascal_Case_With_Underscores` with descriptive names (e.g., `Admin_Add_Movie`)
-- **Variables:** `snake_case` with clear purpose (e.g., `movie_count`)
-- **Structures:** `PascalCase` for type names (e.g., `Movie`)
-- **Constants:** `UPPER_CASE` for constants (not used in current code)
-- **Global Variables:** Descriptive names with scope indication (e.g., `all_users`)
+- **Functions:** `Pascal_Case_With_Underscores` with descriptive names (e.g., `Admin_Add_Movie`).
+- **Variables:** `snake_case` with clear purpose (e.g., `movie_count`).
+- **Structures:** `PascalCase` for type names (e.g., `Movie`).
+- **Constants:** `UPPER_CASE` for constants (e.g., `COLOR_RED`).
+- **Global Variables:** Descriptive names with scope indication (e.g., `all_users`).
+
+#### UI and Visuals
+-   **ANSI Escape Codes:** The system uses standard ANSI color codes for cross-platform visual feedback. This enhances readability by distinguishing between success (green), error (red), and informational (yellow/cyan) messages.
+-   **Consistent Layout:** All screens use a standardized header (`print_header`) and clear prompts (`>>`) to provide a consistent user experience.
+-   **Tabular Data:** All lists of data (movies, purchases) are displayed in aligned tables to make information easy to scan and comprehend.
 
 #### Code Style
 - **Indentation:** Consistent spacing (4 spaces recommended)
@@ -1339,10 +1436,11 @@ uninstall:
 - **User Acceptance:** Testing with real users
 
 ## Conclusion
-This comprehensive documentation provides a complete overview of the JHS-CinePlex movie ticket booking system. The project demonstrates solid C programming fundamentals, modular design principles, and practical data management techniques.
+This comprehensive documentation provides a complete overview of the JHS-CinePlex movie ticket booking system. The project demonstrates solid C programming fundamentals, modular design principles, practical data management techniques, and a strong focus on user experience through a visually enhanced CLI.
 
 ### Key Achievements
 - **Complete System:** Full-featured movie booking system with dual role access.
+- **Visually Enhanced CLI:** A polished, professional interface with styled headers, color-coded feedback, and formatted tables improves user experience.
 - **Data Persistence:** Reliable file-based data storage and retrieval.
 - **User Management:** Secure authentication and user registration.
 - **Modular Design:** Well-organized code structure with a clear separation of concerns.
