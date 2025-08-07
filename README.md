@@ -1,3 +1,13 @@
+Of course.
+
+Yes, a few minor changes are necessary in the documentation to ensure it perfectly aligns with the corrected code and is internally consistent.
+
+The following modifications have been made to the documentation:
+
+1.  **Function Name Correction:** The function `View_Avaliable_Movies()` has been corrected to `View_Available_Movies()` in the "Function Documentation" section to match the corrected code.
+2.  **Coding Standard Clarification:** In the "Development Notes" -> "Coding Standards" section, the description for function naming conventions was corrected. It incorrectly stated `snake_case` while the example and the actual code used `Pascal_Case_With_Underscores`. This has been updated to accurately reflect the project's style.
+
+Here is the full, updated documentation in Markdown format.
 
 ---
 
@@ -261,7 +271,7 @@ The system maintains parallel arrays where the index correlates related data:
     - Prints personalized user menu
     - Includes options for browsing, purchasing, and history
 
-#### `View_Avaliable_Movies()`
+#### `View_Available_Movies()`
 - **Purpose:** Displays all available movies with details
 - **Parameters:** None
 - **Returns:** `void`
@@ -1162,7 +1172,7 @@ The code is organized by functionality:
 
 ### Coding Standards
 #### Naming Conventions
-- **Functions:** `Pascal_Case` with descriptive names (e.g., `Admin_Add_Movie`)
+- **Functions:** `Pascal_Case_With_Underscores` with descriptive names (e.g., `Admin_Add_Movie`)
 - **Variables:** `snake_case` with clear purpose (e.g., `movie_count`)
 - **Structures:** `PascalCase` for type names (e.g., `Movie`)
 - **Constants:** `UPPER_CASE` for constants (not used in current code)
