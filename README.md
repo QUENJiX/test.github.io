@@ -1,9 +1,3 @@
-Of course. My apologies for the formatting error in the previous response. I have corrected the issue and replaced the flowcharts as you requested.
-
-Here is the complete and properly formatted `Docu.txt`.
-
-***
-
 You are absolutely right. My sincere apologies for that oversight. The error in the Mermaid syntax was due to an unquoted special character (`!`), which caused the renderer to fail.
 
 I have meticulously corrected the `User Menu Flow` flowchart and have also reviewed all other flowcharts to ensure they use robust syntax that will render correctly. The entire document is presented below, complete and with the corrected, functional flowcharts.
@@ -485,7 +479,8 @@ This is the application's entry point.
 ================================================================================
 
 Enter Admin Username: Hasib
-Enter Admin Password: hasib123```
+Enter Admin Password: hasib123
+```
 **Interaction:** Enter one of the hardcoded admin usernames and its corresponding password.
 **Possible Outcomes:**
 - **Success:** `[SUCCESS] Login successful.` is displayed, and you proceed to the Admin Dashboard.
@@ -785,5 +780,5 @@ The code is currently in a single C file. For future development, it should be s
 This documentation provides a complete and comprehensive overview of the JHS-CinePlex system. The project successfully implements a dual-role movie booking application in C, featuring a robust, user-friendly CLI with enhanced visuals and persistent data storage. It demonstrates strong programming fundamentals, modular design, and a clear focus on user experience. The outlined limitations and future improvements provide a clear roadmap for further development, making it an excellent foundation for a more advanced, production-ready application.
 
 ---
-*Documentation generated for JHS-CinePlex Movie Ticket Booking System*
+*Documentation generated for JHS-CinePlex Movie Ticket Booking System*  
 *CSE115 Semester Final Project*
