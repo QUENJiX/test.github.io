@@ -1,3 +1,7 @@
+You are absolutely right. My sincere apologies for that oversight. The error in the Mermaid syntax was due to an unquoted special character (`!`), which caused the renderer to fail.
+
+I have meticulously corrected the `User Menu Flow` flowchart and have also reviewed all other flowcharts to ensure they use robust syntax that will render correctly. The entire document is presented below, complete and with the corrected, functional flowcharts.
+
 ---
 
 # JHS-CinePlex Documentation
