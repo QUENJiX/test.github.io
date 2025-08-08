@@ -243,31 +243,145 @@ These flowcharts provide a detailed visual representation of the program's logic
 This chart illustrates the high-level structure of the application, including initialization, the main menu loop, and the shutdown procedure.
 ```mermaid
 graph TD
-    subgraph Initialization
-        A["Start Program"] --> B["call Read_Users()"];
-        B --> C["call Read_Movies()"];
-        C --> D["call Read_Tickets()"];
-    end
-
-    subgraph "Main Program Loop"
-        direction LR
-        D --> E{while(1)};
-        E --> F["Display Main Menu\n(Admin, Customer, Exit)"];
-        F --> G{User Choice?};
-        G -- "1. Admin" --> H["call admin_panel()"];
-        G -- "2. Customer" --> I["call user_portal()"];
-        H --> E;
-        I --> E;
-    end
-
-    subgraph Shutdown
-        G -- "3. Exit" --> J["call Write_Movies()"];
-        J --> K["call Write_Tickets()"];
-        K --> L["call Write_Users()"];
-        L --> M["Print 'All data saved. Goodbye!'"];
-    end
-
-    M --> N["End Program"];
+    A[Start: main()] --> B[Display Main Menu]
+    B --> C{User Choice}
+    
+    %% Main Menu Options
+    C -->|1. Admin Login| D[admin_panel()]
+    C -->|2. Customer Login/Register| E[user_portal()]
+    C -->|3. Exit| F[Save Data & Exit]
+    
+    %% Admin Panel Flow
+    D --> D1[Admin Login Screen]
+    D1 --> D2{Credentials Valid?}
+    D2 -->|No| D3[Show Error & Return to Main Menu]
+    D2 -->|Yes| D4[show_admin_dashboard()]
+    
+    D4 --> D5{Admin Menu Choice}
+    D5 -->|1. Add New Movie| D6[admin_add_movie()]
+    D5 -->|2. Edit Movie| D7[admin_edit_movie()]
+    D5 -->|3. Remove Movie| D8[admin_remove_movie()]
+    D5 -->|4. View All Movies| D9[view_available_movies()]
+    D5 -->|5. View All Purchases| D10[view_all_purchases()]
+    D5 -->|6. Logout| B
+    
+    %% Admin Functions
+    D6 --> D61[Get Movie Details]
+    D61 --> D62[Add to Movie List]
+    D62 --> D63[Write_Movies()]
+    D63 --> D4
+    
+    D7 --> D71[Search Movie]
+    D71 --> D72[Found?]
+    D72 -->|No| D73[Show Error]
+    D72 -->|Yes| D74[Edit Movie Details]
+    D74 --> D75[Write_Movies()]
+    D75 --> D4
+    
+    D8 --> D81[Search Movie]
+    D81 --> D82[Found?]
+    D82 -->|No| D83[Show Error]
+    D82 -->|Yes| D84[Confirm Removal]
+    D84 --> D85[Remove Movie]
+    D85 --> D86[Write_Movies()]
+    D86 --> D4
+    
+    D9 --> D91[Display All Movies]
+    D91 --> D4
+    
+    D10 --> D101[Display All Purchases]
+    D101 --> D4
+    
+    %% User Portal Flow
+    E --> E1[Customer Portal Menu]
+    E1 --> E2{User Choice}
+    E2 -->|1. Login| E3[user_login()]
+    E2 -->|2. Register| E4[user_register()]
+    E2 -->|3. Back| B
+    
+    %% User Login Flow
+    E3 --> E31[Get Credentials]
+    E31 --> E32{Valid User?}
+    E32 -->|No| E33[Show Error]
+    E32 -->|Yes| E34[user_menu()]
+    E33 --> E1
+    
+    %% User Registration Flow
+    E4 --> E41[Get New Username]
+    E41 --> E42{Username Exists?}
+    E42 -->|Yes| E43[Show Error]
+    E42 -->|No| E44[Get Password]
+    E44 --> E45[Add User]
+    E45 --> E46[Write_Users()]
+    E46 --> E1
+    
+    %% User Menu Flow
+    E34 --> E35[Display User Menu]
+    E35 --> E36{User Choice}
+    E36 -->|1. View Available Movies| D9
+    E36 -->|2. Purchase Tickets| E37[purchase_tickets()]
+    E36 -->|3. View My Purchases| E38[view_my_purchases()]
+    E36 -->|4. Logout| B
+    
+    %% Purchase Tickets Flow
+    E37 --> E371[Display Movie List]
+    E371 --> E372{Select Movie}
+    E372 -->|0. Back| E34
+    E372 -->|Movie Number| E373{Seats Available?}
+    E373 -->|No| E374[Show Sold Out Error]
+    E373 -->|Yes| E375[Get Ticket Count]
+    E375 --> E376{Valid Count?}
+    E376 -->|No| E377[Show Error]
+    E376 -->|Yes| E378[Show Purchase Summary]
+    E378 --> E379{Confirm Purchase?}
+    E379 -->|No| E3710[Cancel Purchase]
+    E379 -->|Yes| E3711[Process Purchase]
+    E3711 --> E3712[Update Seats]
+    E3712 --> E3713[Add to Purchase History]
+    E3713 --> E3714[Write_Tickets() & Write_Movies()]
+    E3714 --> E3715[Show Receipt]
+    E374 --> E34
+    E377 --> E34
+    E3710 --> E34
+    E3715 --> E34
+    
+    %% View My Purchases Flow
+    E38 --> E381[Display User's Purchase History]
+    E381 --> E382[Show Total Spent]
+    E382 --> E34
+    
+    %% Data Persistence Functions
+    F --> F1[Write_Movies()]
+    F1 --> F2[Write_Tickets()]
+    F2 --> F3[Write_Users()]
+    F3 --> F4[Exit Program]
+    
+    %% Helper Functions
+    G[Read_Movies()] -->|On Startup| A
+    H[Read_Tickets()] -->|On Startup| A
+    I[Read_Users()] -->|On Startup| A
+    J[Default_Movies()] -->|If No Data| G
+    
+    %% Utility Functions
+    K[clear_screen()] -->|Used Throughout| D4
+    L[print_header()] -->|Used Throughout| D4
+    M[get_menu_choice()] -->|Used Throughout| D4
+    N[confirm_prompt()] -->|Used Throughout| D4
+    O[find_movie_by_title_substr()] -->|Used in Admin| D7
+    O -->|Used in Admin| D8
+    
+    %% Style Definitions
+    classDef mainFunction fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef adminFunction fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef userFunction fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef dataFunction fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef utilityFunction fill:#fce4ec,stroke:#880e4f,stroke-width:1px
+    
+    class A,B,C,F mainFunction
+    class D,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D61,D62,D63,D71,D72,D73,D74,D75,D81,D82,D83,D84,D85,D86,D91,D101 adminFunction
+    class E,E1,E2,E3,E31,E32,E33,E34,E35,E36,E4,E41,E42,E43,E44,E45,E46,E37,E371,E372,E373,E374,E375,E376,E377,E378,E379,E3710,E3711,E3712,E3713,E3714,E3715,E38,E381,E382 userFunction
+    class F1,F2,F3,G,H,I,J dataFunction
+    class K,L,M,N,O utilityFunction
 ```
 
 ### 2. Administrator Module Flow
