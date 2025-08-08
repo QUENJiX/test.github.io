@@ -759,191 +759,184 @@
         </section>
 
         <section id="flowcharts">
-            <h2>Program Flowcharts</h2>
-            <p>These flowcharts provide a detailed visual representation of the program's logic, from the main application loop to the specific logic within each module.</p>
-            
-            <h3>1. Main Program Flow</h3>
-            <div class="mermaid">
-            graph TD
-                A[Start Program] --> B[Initialize Data from Files]
-                B --> C[Display Main Menu]
-                C --> D{User Choice}
-                D -->|Admin Login| E[Admin Authentication]
-                D -->|Customer Portal| F[User Authentication Portal]
-                D -->|Exit| G[Save All Data to Files]
-                E --> H{Authentication Successful?}
-                H -->|Yes| I[Display Admin Dashboard & Menu Loop]
-                H -->|No| J[Show Error Message]
-                J --> C
-                I --> K{Admin Choice}
-                K -->|Add Movie| L[Admin Add Movie]
-                K -->|Edit Movie| M[Admin Edit Movie]
-                K -->|Remove Movie| N[Admin Remove Movie]
-                K -->|View Movies| O[View Available Movies]
-                K -->|View Purchases| P[View All Purchases]
-                K -->|Logout| C
-                L --> I
-                M --> I
-                N --> I
-                O --> I
-                P --> I
-                F --> Q{Portal Choice}
-                Q -->|Login| R[User Login]
-                Q -->|Register| S[User Registration]
-                Q -->|Back| C
-                R --> T{Login Successful?}
-                T -->|Yes| U[User Menu Loop]
-                T -->|No| V[Show Error Message]
-                V --> F
-                S --> W{Registration Valid?}
-                W -->|Yes| X[Show Success Message]
-                W -->|No| Y[Show Error Message]
-                X --> F
-                Y --> F
-                U --> Z{User Choice}
-                Z -->|View Movies| O
-                Z -->|Purchase Tickets| AA[Purchase Tickets]
-                Z -->|View History| AB[View My Purchases]
-                Z -->|Logout| F
-                AA --> U
-                AB --> U
-                G --> AC[Exit Program]
-            </div>
-
-            <h3>2. Administrator Module Flow</h3>
-            <div class="mermaid">
-            graph TD
-                A[Admin Module Start] --> B[Display Admin Login]
-                B --> C[Enter Username/Password]
-                C --> D{Hardcoded Credentials Valid?}
-                D -->|No| E[Show Access Denied]
-                E --> F[Return to Main Menu]
-                D -->|Yes| G[Display Admin Dashboard & Menu]
-                G --> H{Admin Selection}
-                H -->|Add Movie| I[Add Movie Process]
-                H -->|Edit Movie| J[Edit Movie Process]
-                H -->|Remove Movie| K[Remove Movie Process]
-                H -->|View Movies| L[Display All Movies]
-                H -->|View Purchases| M[Display All Purchases]
-                H -->|Logout| N[Return to Main Menu]
-                I --> O[Enter Movie Details]
-                O --> P[Add to Arrays & Increment Count]
-                P --> Q[Write to movie_list.txt]
-                Q --> R[Show Success Message]
-                R --> G
-                J --> S[Search for Movie by Title]
-                S --> T[Select Movie to Edit]
-                T --> U[Enter New Values]
-                U --> V[Update Movie Data]
-                V --> W[Write to movie_list.txt]
-                W --> X[Show Success Message]
-                X --> G
-                K --> Y[Search for Movie by Title]
-                Y --> Z[Select Movie to Remove & Confirm]
-                Z --> AA[Remove from Arrays & Decrement Count]
-                AA --> AB[Write to movie_list.txt]
-                AB --> AC[Show Success Message]
-                AC --> G
-                L --> AD[Display Movie List]
-                AD --> AE[Wait for User Input]
-                AE --> G
-                M --> AF[Display All Purchases]
-                AF --> AG[Wait for User Input]
-                AG --> G
-            </div>
-
-            <h3>3. User Module Flow</h3>
-            <div class="mermaid">
-            graph TD
-                A[User Module Start] --> B[Display User Menu]
-                B --> C{User Selection}
-                C -->|View Movies| D[View Available Movies]
-                C -->|Purchase Tickets| E[Purchase Tickets Process]
-                C -->|View History| F[View My Purchases]
-                C -->|Logout| G[Return to User Portal]
-                D --> H[Display Formatted Movie List]
-                H --> I[Wait for User Input]
-                I --> B
-                E --> K[List Available Movies]
-                K --> L[Select Movie]
-                L --> M{Movie Seats > 0?}
-                M -->|No| N[Show Sold Out Message]
-                N --> O[Wait for Input]
-                O --> B
-                M -->|Yes| P[Enter Ticket Quantity]
-                P --> Q{Quantity Valid?}
-                Q -->|No| R[Show Error Message]
-                R --> O
-                Q -->|Yes| S[Calculate Total Price]
-                S --> T[Show Purchase Summary]
-                T --> U{Confirm Purchase?}
-                U -->|No| V[Cancel Purchase]
-                V --> O
-                U -->|Yes| W[Process Purchase]
-                W --> X[Update Seat Count]
-                X --> Y[Record Transaction & Date]
-                Y --> Z[Show Ticket Receipt]
-                Z --> O
-                F --> AA[Filter Purchases by Current User]
-                AA --> AB[Display Purchase History]
-                AB --> AC[Calculate & Display Total Spent]
-                AC --> AD[Wait for User Input]
-                AD --> B
-            </div>
-            
-            <h3>4. Authentication Flow</h3>
-            <div class="mermaid">
-            graph TD
-                A[Start] --> B[Main Menu]
-                B -->|Select 'Admin Login'| C[Enter Admin Username & Password]
-                B -->|Select 'Customer Portal'| D[Display Portal: Login / Register / Back]
-
-                C --> E{Credentials Match Hardcoded List?}
-                E -->|Yes| F[Login Success, Proceed to Admin Menu]
-                E -->|No| G[Show Error, Return to Main Menu]
-                G --> B
-
-                D --> H{Portal Choice}
-                H -->|Register| I[Enter New Username]
-                H -->|Login| J[Enter Username & Password]
-                H -->|Back| B
-
-                I --> K{Username Exists in File?}
-                K -->|Yes| L[Show 'Username Taken' Error]
-                L --> D
-                K -->|No| M[Enter New Password]
-                M --> N[Add User to Array]
-                N --> O[Write Users Array to File]
-                O --> P[Show 'Registration Success']
-                P --> D
-
-                J --> Q[Search Users Array]
-                Q --> R{User Found and Password Matches?}
-                R -->|No| S[Show 'Invalid Credentials' Error]
-                S --> D
-                R -->|Yes| T[Login Success, Proceed to User Menu]
-            </div>
-
-            <h3>5. Data Persistence Flow</h3>
-            <div class="mermaid">
-            graph TD
-                A[Program Start] --> B[Read users.txt into Array]
-                B --> C[Read tickets.txt into Array]
-                C --> D[Attempt to Read movie_list.txt]
-                D --> E{File Found?}
-                E -->|No| F[Create Default Movie List in Array]
-                F --> G[Write Default Movies to new movie_list.txt]
-                E -->|Yes| H[Load Movie Data from File into Arrays]
-                G --> I[Proceed to Main Program Loop]
-                H --> I
-                I --> J{Program Exit Triggered?}
-                J -->|No| I
-                J -->|Yes| K[Write Movies Array to movie_list.txt]
-                K --> L[Write Purchases Array to tickets.txt]
-                L --> M[Write Users Array to users.txt]
-                M --> N[Program Exit]
-            </div>
-        </section>
+<h2>Program Flowcharts</h2>
+<p>Visual representations of the system's logic and user flow.</p>
+<h3 id="flowcharts-main">Main Program Flow</h3>
+<div class="mermaid">
+                graph TD
+                    A[Start Program] --&gt; B[Initialize Data]
+                    B --&gt; C[Display Main Menu]
+                    C --&gt; D{User Choice}
+                    D --&gt;|Admin Login| E[Admin Authentication]
+                    D --&gt;|Customer Portal| F[User Authentication Portal]
+                    D --&gt;|Exit| G[Save All Data]
+                    E --&gt; H{Authentication Successful?}
+                    H --&gt;|Yes| I[Admin Menu Loop]
+                    H --&gt;|No| J[Show Error Message]
+                    J --&gt; C
+                    I --&gt; K{Admin Choice}
+                    K --&gt;|Add Movie| L[Admin Add Movie]
+                    K --&gt;|Edit Movie| M[Admin Edit Movie]
+                    K --&gt;|Remove Movie| N[Admin Remove Movie]
+                    K --&gt;|View Movies| O[View Available Movies]
+                    K --&gt;|View Purchases| P[View All Purchases]
+                    K --&gt;|Logout| C
+                    L --&gt; I
+                    M --&gt; I
+                    N --&gt; I
+                    O --&gt; I
+                    P --&gt; I
+                    F --&gt; Q{User Choice}
+                    Q --&gt;|Login| R[User Login]
+                    Q --&gt;|Register| S[User Registration]
+                    Q --&gt;|Back| C
+                    R --&gt; T{Login Successful?}
+                    T --&gt;|Yes| U[User Menu Loop]
+                    T --&gt;|No| V[Show Error Message]
+                    V --&gt; F
+                    S --&gt; W[Registration Successful?]
+                    W --&gt;|Yes| X[Show Success Message]
+                    W --&gt;|No| Y[Show Error Message]
+                    X --&gt; F
+                    Y --&gt; F
+                    U --&gt; Z{User Choice}
+                    Z --&gt;|View Movies| O
+                    Z --&gt;|Purchase Tickets| AA[Purchase Tickets]
+                    Z --&gt;|View History| AB[View My Purchases]
+                    Z --&gt;|Logout| C
+                    AA --&gt; U
+                    AB --&gt; U
+                    G --&gt; AC[Exit Program]
+                </div>
+<h3 id="flowcharts-admin">Administrator Module Flow</h3>
+<div class="mermaid">
+                graph TD
+                    A[Admin Module Start] --&gt; B[Display Admin Login]
+                    B --&gt; C[Enter Username/Password]
+                    C --&gt; D{Credentials Valid?}
+                    D --&gt;|No| E[Show Access Denied]
+                    E --&gt; F[Return to Main Menu]
+                    D --&gt;|Yes| G[Display Admin Menu]
+                    G --&gt; H{Admin Selection}
+                    H --&gt;|Add Movie| I[Add Movie Process]
+                    H --&gt;|Edit Movie| J[Edit Movie Process]
+                    H --&gt;|Remove Movie| K[Remove Movie Process]
+                    H --&gt;|View Movies| L[Display All Movies]
+                    H --&gt;|View Purchases| M[Display All Purchases]
+                    H --&gt;|Logout| N[Return to Main Menu]
+                    I --&gt; O[Enter Movie Details]
+                    O --&gt; P[Validate Input]
+                    P --&gt; Q[Add to Arrays]
+                    Q --&gt; R[Update Movie Count]
+                    R --&gt; S[Show Success Message]
+                    S --&gt; G
+                    J --&gt; T[List All Movies]
+                    T --&gt; U[Select Movie to Edit]
+                    U --&gt; V[Enter New Values]
+                    V --&gt; W[Update Movie Data]
+                    W --&gt; X[Show Success Message]
+                    X --&gt; G
+                    K --&gt; Y[List All Movies]
+                    Y --&gt; Z[Select Movie to Remove]
+                    Z --&gt; AA[Remove from Arrays]
+                    AA --&gt; AB[Update Movie Count]
+                    AB --&gt; AC[Show Success Message]
+                    AC --&gt; G
+                    L --&gt; AD[Display Movie List]
+                    AD --&gt; AE[Wait for User Input]
+                    AE --&gt; G
+                    M --&gt; AF[Display All Purchases]
+                    AF --&gt; AG[Wait for User Input]
+                    AG --&gt; G
+                </div>
+<h3 id="flowcharts-user">User Module Flow</h3>
+<div class="mermaid">
+                graph TD
+                    A[User Module Start] --&gt; B[Display User Menu]
+                    B --&gt; C{User Selection}
+                    C --&gt;|View Movies| D[View Available Movies]
+                    C --&gt;|Purchase Tickets| E[Purchase Tickets Process]
+                    C --&gt;|View History| F[View My Purchases]
+                    C --&gt;|Logout| G[Return to Main Menu]
+                    D --&gt; H[Display Movie List]
+                    H --&gt; I[Show Movie Details]
+                    I --&gt; J[Wait for User Input]
+                    J --&gt; B
+                    E --&gt; K[List Available Movies]
+                    K --&gt; L[Select Movie]
+                    L --&gt; M{Movie Available?}
+                    M --&gt;|No| N[Show Sold Out Message]
+                    N --&gt; O[Wait for Input]
+                    O --&gt; B
+                    M --&gt;|Yes| P[Enter Ticket Quantity]
+                    P --&gt; Q{Quantity Valid?}
+                    Q --&gt;|No| R[Show Error Message]
+                    R --&gt; O
+                    Q --&gt;|Yes| S[Calculate Total Price]
+                    S --&gt; T[Show Purchase Summary]
+                    T --&gt; U{Confirm Purchase?}
+                    U --&gt;|No| V[Cancel Purchase]
+                    V --&gt; O
+                    U --&gt;|Yes| W[Process Purchase]
+                    W --&gt; X[Update Seat Count]
+                    X --&gt; Y[Record Transaction]
+                    Y --&gt; Z[Show Success Message]
+                    Z --&gt; O
+                    F --&gt; AA[Filter User Purchases]
+                    AA --&gt; AB[Display Purchase History]
+                    AB --&gt; AC[Calculate Total Spending]
+                    AC --&gt; AD[Show Summary]
+                    AD --&gt; AE[Wait for User Input]
+                    AE --&gt; B
+                </div>
+<h3 id="flowcharts-auth">Authentication Flow</h3>
+<div class="mermaid">
+                graph TD
+                    A[Authentication Start] --&gt; B[Display Auth Portal]
+                    B --&gt; C{User Choice}
+                    C --&gt;|Login| D[Login Process]
+                    C --&gt;|Register| E[Registration Process]
+                    C --&gt;|Back| F[Return to Main Menu]
+                    D --&gt; G[Enter Username]
+                    G --&gt; H[Enter Password]
+                    H --&gt; I[Search User Database]
+                    I --&gt; J{User Found?}
+                    J --&gt;|No| K[Show Invalid Credentials]
+                    K --&gt; L[Return to Auth Portal]
+                    J --&gt;|Yes| M{Password Match?}
+                    M --&gt;|No| K
+                    M --&gt;|Yes| N[Login Successful]
+                    N --&gt; O[Proceed to User Menu]
+                    E --&gt; P[Enter New Username]
+                    P --&gt; Q{Username Exists?}
+                    Q --&gt;|Yes| R[Show Username Taken]
+                    R --&gt; S[Return to Auth Portal]
+                    Q --&gt;|No| T[Enter New Password]
+                    T --&gt; U[Create User Account]
+                    U --&gt; V[Save to Database]
+                    V --&gt; W[Show Registration Success]
+                    W --&gt; L
+                </div>
+<h3 id="flowcharts-data">Data Persistence Flow</h3>
+<div class="mermaid">
+                graph TD
+                    A[Program Start] --&gt; B[Read Users File]
+                    B --&gt; C[Read Movies File]
+                    C --&gt; D[Read Tickets File]
+                    D --&gt; E{Files Exist?}
+                    E --&gt;|No| F[Create Default Data]
+                    E --&gt;|Yes| G[Load Data into Arrays]
+                    F --&gt; H[Write Default Files]
+                    H --&gt; I[Main Program Loop]
+                    G --&gt; I
+                    I --&gt; J{Program Ending?}
+                    J --&gt;|No| I
+                    J --&gt;|Yes| K[Write Movies File]
+                    K --&gt; L[Write Tickets File]
+                    L --&gt; M[Write Users File]
+                    M --&gt; N[Program Exit]
+                </div>
+</section>
         
         <section id="file-io">
             <h2>File I/O and Data Persistence</h2>
@@ -1412,4 +1405,5 @@ document.getElementById("backToTopBtn").addEventListener("click", function(){
 </script>
 </body>
 </html>
+
 
