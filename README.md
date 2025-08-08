@@ -1,3 +1,12 @@
+Of course. My apologies for the formatting error in the previous response. I have corrected the issue and replaced the flowcharts as you requested.
+
+Here is the complete and properly formatted `Docu.txt`.
+
+***
+
+You are absolutely right. My sincere apologies for that oversight. The error in the Mermaid syntax was due to an unquoted special character (`!`), which caused the renderer to fail.
+
+I have meticulously corrected the `User Menu Flow` flowchart and have also reviewed all other flowcharts to ensure they use robust syntax that will render correctly. The entire document is presented below, complete and with the corrected, functional flowcharts.
 
 ---
 
@@ -286,7 +295,7 @@ graph TD
 ```
 
 ### 2. Administrator Module Flow
-This chart details the entire workflow for an administrator, from login to performing various management tasks like adding, editing, and removing movies. The edit and remove processes now include the substring search logic.
+This chart details the entire workflow for an administrator, from login to performing various management tasks like adding, editing, and removing movies.
 ```mermaid
 graph TD
     A[Admin Module Start] --> B[Display Admin Login]
@@ -571,12 +580,13 @@ Confirm removal? (Y/N): Y
 
 ---
 ### 7. Admin: View All Purchases
-**Screen:**```
+**Screen:**
+```
 ================================================================================
                              All Purchase History
 ================================================================================
 ID    Date         Movie                Tickets  Amount   User      
---------------------------------------------------------------------------------
+---------------------------------------------------------------------
 #1    2024-05-21   Hereditary           2        400      john_doe  
 #2    2024-05-21   The Notebook         1        200      jane_doe  
 ```
@@ -600,7 +610,8 @@ The entry point for customers.
 
 ---
 ### 9. Customer Registration
-**Screen:**```
+**Screen:**
+```
 ================================================================================
                            New User Registration
 ================================================================================
@@ -653,7 +664,7 @@ The main dashboard for a logged-in customer.
                                Available Movies
 ================================================================================
 No.  Title                          Genre              Price    Seats   
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------
 1    Hereditary                     Horror             200      50      
 2    The Notebook                   Romantic           200      10      
 3    Boss Baby                      Family / Comedy    200      50      
@@ -705,7 +716,8 @@ Confirm purchase? (Y/N): Y
   Date : 2024-05-21                             
 +-----------------------------------------------+
 [SUCCESS] Purchase successful!
-```**Possible Outcomes:**
+```
+**Possible Outcomes:**
 - **Success:** The receipt is shown.
 - **Cancelled:** `[INFO] Purchase cancelled.` is shown if you enter `N`.
 - **Invalid Quantity:** `[ERROR] Invalid ticket count.` is shown if the number is zero, negative, or more than available seats.
@@ -719,15 +731,15 @@ Confirm purchase? (Y/N): Y
                         Purchase History for new_user
 ================================================================================
 Date         Movie Title                    Tickets  Amount   
---------------------------------------------------------------------------------
+---------------------------------------------------------------
 2024-05-21   Hereditary                     2        400      
---------------------------------------------------------------------------------
+---------------------------------------------------------------
 Total Spent: BDT 400
 ```
 **Screen (No History):**
 ```
 ...
---------------------------------------------------------------------------------
+---------------------------------------------------------------
 [INFO] You have not made any purchases yet.
 ```
 **Interaction:** View your personal purchase history. Press Enter to return to the Customer Menu.
