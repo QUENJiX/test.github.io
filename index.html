@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JHS-CinePlex | Complete Project Documentation</title>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JHS-CinePlex | Complete Project Documentation</title>
+<style>
         /* --- ROOT VARIABLES & GLOBAL STYLES --- */
         :root {
             --color-bg: #0d1117;
@@ -120,7 +120,7 @@
 
         .sidebar nav li a, .sidebar nav li > div {
             display: block;
-            padding: 8px 12px;
+            padding: 0;
             color: var(--color-text-secondary);
             text-decoration: none;
             font-size: 0.9em;
@@ -131,6 +131,7 @@
         .sidebar nav > ul > li > div > a {
             flex-grow: 1;
             padding: 0;
+            font-size: 1em;
             color: var(--color-text-primary);
         }
         .sidebar nav > ul > li > div > a:hover {
@@ -142,9 +143,14 @@
             font-size: 1.2em;
             transition: transform 0.2s ease;
             transform-origin: center;
-            padding: 0 5px;
+            padding: 0 15px;
             color: var(--color-text-secondary);
         }
+
+        .toggle-icon:hover {
+            color: var(--color-accent);
+        }
+
         .sidebar nav > ul > li.expanded > div > .toggle-icon {
             transform: rotate(90deg);
         }
@@ -167,8 +173,6 @@
 
         .sidebar nav li a.active {
             color: var(--color-accent-hover);
-            border-left: 2px solid var(--color-accent-hover);
-            background-color: rgba(88, 166, 255, 0.1);
         }
         
         /* --- SIDEBAR TOGGLE BUTTON --- */
@@ -209,7 +213,14 @@
 
         .content section {
             margin-bottom: 80px;
-            /* REMOVED OPACITY AND TRANSFORM FOR VISIBILITY */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .content section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .content section:last-child {
@@ -427,163 +438,181 @@
             h2 { font-size: 1.7em; }
             h3 { font-size: 1.3em; }
         }
+    
+        /* Floating Back to Top Button */
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 999;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            background-color: var(--color-bg-secondary);
+            color: white;
+            cursor: pointer;
+            padding: 12px 16px;
+            border-radius: 100px;
+            transition: background-color 0.3s ease;
+        }
+        #backToTopBtn:hover {
+            background-color: var(--color-text-secondary);
+        }
     </style>
 </head>
 <body>
-    <button id="sidebar-toggle" title="Toggle Sidebar">«</button>
+<button id="sidebar-toggle" title="Toggle Sidebar">«</button>
+<aside class="sidebar">
+    <div class="sidebar-header">JHS-CinePlex Docs</div>
+    <nav id="TableOfContents">
+        <ul>
+            <li data-section="overview">
+                <div><a href="#overview">Project Overview</a><span class="toggle-icon">›</span></div>
+                <ul>
+                    <li><a href="#overview-intro">Introduction</a></li>
+                    <li><a href="#overview-objectives">Objectives</a></li>
+                    <li><a href="#overview-features">Key Features</a></li>
+                    <li><a href="#overview-stack">Tech Stack</a></li>
+                </ul>
+            </li>
+            <li data-section="architecture">
+                <div><a href="#architecture">System Architecture</a></div>
+            </li>
+            <li data-section="data-structures">
+                <div><a href="#data-structures">Data Structures</a></div>
+            </li>
+            <li data-section="functions">
+                <div><a href="#functions">Function Docs</a><span class="toggle-icon">›</span></div>
+                <ul>
+                    <li><a href="#functions-main">Main Functions</a></li>
+                    <li><a href="#functions-admin">Admin Functions</a></li>
+                    <li><a href="#functions-user">User Functions</a></li>
+                    <li><a href="#functions-persistence">Persistence</a></li>
+                    <li><a href="#functions-utility">Utility</a></li>
+                </ul>
+            </li>
+            <li data-section="flowcharts">
+                <div><a href="#flowcharts">Program Flowcharts</a></div>
+            </li>
+            <li data-section="file-io">
+                <div><a href="#file-io">File I/O</a></div>
+            </li>
+            <li data-section="navigation">
+                <div><a href="#navigation">Navigating the System</a></div>
+            </li>
+            <li data-section="limitations">
+                <div><a href="#limitations">Limitations & Future</a><span class="toggle-icon">›</span></div>
+                <ul>
+                    <li><a href="#limitations-current">Current Limitations</a></li>
+                    <li><a href="#limitations-future">Future Improvements</a></li>
+                </ul>
+            </li>
+            <li data-section="dev-notes">
+                <div><a href="#dev-notes">Development Notes</a><span class="toggle-icon">›</span></div>
+                <ul>
+                    <li><a href="#dev-notes-org">Organization</a></li>
+                    <li><a href="#dev-notes-standards">Standards</a></li>
+                </ul>
+            </li>
+            <li data-section="conclusion">
+                <div><a href="#conclusion">Conclusion</a></div>
+            </li>
+        </ul>
+    </nav>
+</aside>
+<div class="container">
+    <main class="content">
+        <section id="hero">
+            <h1>JHS-CinePlex Movie Ticket Booking System</h1>
+            <h3>CSE115 Semester Final Project Documentation</h3>
+            <p>This document provides a complete and comprehensive overview of the JHS-CinePlex system. It details the project's architecture, data structures, features, and implementation, serving as a guide for developers, administrators, and users.</p>
+        </section>
 
-    <aside class="sidebar">
-        <div class="sidebar-header">JHS-CinePlex Docs</div>
-        <nav id="TableOfContents">
-            <ul>
-                <li data-section="overview">
-                    <div><a href="#overview">Project Overview</a><span class="toggle-icon">›</span></div>
-                    <ul>
-                        <li><a href="#overview-intro">Introduction</a></li>
-                        <li><a href="#overview-objectives">Objectives</a></li>
-                        <li><a href="#overview-features">Key Features</a></li>
-                        <li><a href="#overview-stack">Tech Stack</a></li>
-                    </ul>
-                </li>
-                <li data-section="architecture">
-                    <div><a href="#architecture">System Architecture</a></div>
-                </li>
-                <li data-section="data-structures">
-                    <div><a href="#data-structures">Data Structures</a></div>
-                </li>
-                <li data-section="functions">
-                    <div><a href="#functions">Function Docs</a><span class="toggle-icon">›</span></div>
-                     <ul>
-                        <li><a href="#functions-main">Main Functions</a></li>
-                        <li><a href="#functions-admin">Admin Functions</a></li>
-                        <li><a href="#functions-user">User Functions</a></li>
-                        <li><a href="#functions-persistence">Persistence</a></li>
-                        <li><a href="#functions-utility">Utility</a></li>
-                    </ul>
-                </li>
-                <li data-section="flowcharts">
-                    <div><a href="#flowcharts">Program Flowcharts</a></div>
-                </li>
-                <li data-section="file-io">
-                    <div><a href="#file-io">File I/O</a></div>
-                </li>
-                <li data-section="navigation">
-                    <div><a href="#navigation">Navigating the System</a></div>
-                </li>
-                <li data-section="limitations">
-                    <div><a href="#limitations">Limitations & Future</a><span class="toggle-icon">›</span></div>
-                    <ul>
-                        <li><a href="#limitations-current">Current Limitations</a></li>
-                        <li><a href="#limitations-future">Future Improvements</a></li>
-                    </ul>
-                </li>
-                <li data-section="dev-notes">
-                    <div><a href="#dev-notes">Development Notes</a><span class="toggle-icon">›</span></div>
-                     <ul>
-                        <li><a href="#dev-notes-org">Organization</a></li>
-                        <li><a href="#dev-notes-standards">Standards</a></li>
-                    </ul>
-                </li>
-                <li data-section="conclusion">
-                    <div><a href="#conclusion">Conclusion</a></div>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+        <hr>
 
-    <div class="container">
-        <main class="content">
-
-            <section id="hero">
-                <h1>JHS-CinePlex Movie Ticket Booking System</h1>
-                <h3>CSE115 Semester Final Project Documentation</h3>
-                <p>This document provides a complete and comprehensive overview of the JHS-CinePlex system. It details the project's architecture, data structures, features, and implementation, serving as a guide for developers, administrators, and users.</p>
-            </section>
+        <section id="overview">
+            <h2>Project Overview</h2>
             
-            <hr>
+            <h3 id="overview-intro">Introduction</h3>
+            <p>JHS-CinePlex is a comprehensive Command Line Interface (CLI)-based movie ticket booking system developed in C. This system provides a complete solution for cinema management, allowing administrators to manage movies and showtimes while customers can browse available movies, purchase tickets, and view their purchase history. It features a visually enhanced interface with colors, formatted tables, and an administrative dashboard for a professional and user-friendly experience.</p>
 
-            <section id="overview">
-                <h2>Project Overview</h2>
-                
-                <h3 id="overview-intro">Introduction</h3>
-                <p>JHS-CinePlex is a comprehensive Command Line Interface (CLI)-based movie ticket booking system developed in C. This system provides a complete solution for cinema management, allowing administrators to manage movies and showtimes while customers can browse available movies, purchase tickets, and view their purchase history. It features a visually enhanced interface with colors, formatted tables, and an administrative dashboard for a professional and user-friendly experience.</p>
+            <h3 id="overview-objectives">System Objectives</h3>
+            <ul>
+                <li>Provide a user-friendly and visually appealing interface for both administrators and customers.</li>
+                <li>Enable efficient movie management (add, edit, remove) with substring search capabilities.</li>
+                <li>Facilitate secure user authentication and registration.</li>
+                <li>Streamline the ticket purchasing process with clear receipts.</li>
+                <li>Maintain persistent data storage for movies, users, and transactions.</li>
+                <li>Generate sales reports and track purchase history.</li>
+            </ul>
+            
+            <h3 id="overview-features">Key Features</h3>
+             <ul>
+                <li><strong>Dual Role System:</strong> Administrator and Customer access levels with distinct functionalities.</li>
+                <li><strong>Admin Dashboard:</strong> A summary view for administrators showing total movies, tickets sold, revenue, and recent purchases.</li>
+                <li><strong>User Management:</strong> Robust registration and login functionality for customers.</li>
+                <li><strong>Advanced Movie Management:</strong> Add, edit, and remove movies. Editing and removing is made easy with a case-insensitive substring search.</li>
+                <li><strong>Enhanced Visual Interface:</strong> Features styled headers, color-coded feedback (success, error, info), and aligned tables for improved readability.</li>
+                <li><strong>Ticket Booking:</strong> Browse movies, check seat availability (color-coded), purchase tickets, and receive a formatted on-screen receipt.</li>
+                <li><strong>Purchase History:</strong> Track individual and all system-wide purchases in a clean, tabular format.</li>
+                <li><strong>Data Persistence:</strong> Automatically saves and loads all data (movies, users, purchases) from text files.</li>
+                <li><strong>Default Data:</strong> Pre-populated with sample movies for immediate demonstration.</li>
+            </ul>
 
-                <h3 id="overview-objectives">System Objectives</h3>
-                <ul>
-                    <li>Provide a user-friendly and visually appealing interface for both administrators and customers.</li>
-                    <li>Enable efficient movie management (add, edit, remove) with substring search capabilities.</li>
-                    <li>Facilitate secure user authentication and registration.</li>
-                    <li>Streamline the ticket purchasing process with clear receipts.</li>
-                    <li>Maintain persistent data storage for movies, users, and transactions.</li>
-                    <li>Generate sales reports and track purchase history.</li>
-                </ul>
-                
-                <h3 id="overview-features">Key Features</h3>
-                 <ul>
-                    <li><strong>Dual Role System:</strong> Administrator and Customer access levels with distinct functionalities.</li>
-                    <li><strong>Admin Dashboard:</strong> A summary view for administrators showing total movies, tickets sold, revenue, and recent purchases.</li>
-                    <li><strong>User Management:</strong> Robust registration and login functionality for customers.</li>
-                    <li><strong>Advanced Movie Management:</strong> Add, edit, and remove movies. Editing and removing is made easy with a case-insensitive substring search.</li>
-                    <li><strong>Enhanced Visual Interface:</strong> Features styled headers, color-coded feedback (success, error, info), and aligned tables for improved readability.</li>
-                    <li><strong>Ticket Booking:</strong> Browse movies, check seat availability (color-coded), purchase tickets, and receive a formatted on-screen receipt.</li>
-                    <li><strong>Purchase History:</strong> Track individual and all system-wide purchases in a clean, tabular format.</li>
-                    <li><strong>Data Persistence:</strong> Automatically saves and loads all data (movies, users, purchases) from text files.</li>
-                    <li><strong>Default Data:</strong> Pre-populated with sample movies for immediate demonstration.</li>
-                </ul>
+            <h3 id="overview-stack">Technology Stack</h3>
+            <ul>
+                <li><strong>Language:</strong> C (Standard C)</li>
+                <li><strong>Platform:</strong> Primarily designed for Windows (`cls` command) but easily adaptable for Linux/macOS.</li>
+                <li><strong>Data Storage:</strong> Text files (<code>movie_list.txt</code>, <code>tickets.txt</code>, <code>users.txt</code>)</li>
+                <li><strong>Libraries:</strong> Standard C libraries (<code>stdio.h</code>, <code>stdlib.h</code>, <code>string.h</code>, <code>ctype.h</code>, <code>time.h</code>)</li>
+            </ul>
+        </section>
 
-                <h3 id="overview-stack">Technology Stack</h3>
-                <ul>
-                    <li><strong>Language:</strong> C (Standard C)</li>
-                    <li><strong>Platform:</strong> Primarily designed for Windows (`cls` command) but easily adaptable for Linux/macOS.</li>
-                    <li><strong>Data Storage:</strong> Text files (<code>movie_list.txt</code>, <code>tickets.txt</code>, <code>users.txt</code>)</li>
-                    <li><strong>Libraries:</strong> Standard C libraries (<code>stdio.h</code>, <code>stdlib.h</code>, <code>string.h</code>, <code>ctype.h</code>, <code>time.h</code>)</li>
-                </ul>
-            </section>
+        <section id="architecture">
+            <h2>System Architecture</h2>
+            <h3>Overall System Design</h3>
+            <p>The system follows a modular architecture with clear separation of concerns:</p>
+            <h3>Module Breakdown</h3>
+            <ol>
+                <li><strong>Main Module</strong>
+                    <p>Entry point of the application (<code>main</code>). Handles main menu navigation, coordinates between admin and user modules, and manages program termination and data saving.</p>
+                </li>
+                <li><strong>Administrator Module</strong>
+                    <p>Authentication for admin users (hardcoded credentials). Displays an overview dashboard, handles advanced movie management operations (add, edit, remove with search), and purchase report generation (view all purchases).</p>
+                </li>
+                <li><strong>User Module</strong>
+                    <p>Manages customer authentication (login) and registration, movie browsing and ticket purchasing, and personal purchase history viewing.</p>
+                </li>
+                <li><strong>Data Persistence Module</strong>
+                    <p>Responsible for file I/O operations for all data types, data serialization and deserialization from/to text files, and default data initialization if data files are not found.</p>
+                </li>
+                 <li><strong>UI/Utility Module</strong>
+                    <p>A collection of helper functions for clearing the screen, pausing, and printing formatted/colored output (headers, success/error messages).</p>
+                </li>
+            </ol>
+        </section>
 
-            <section id="architecture">
-                <h2>System Architecture</h2>
-                <h3>Overall System Design</h3>
-                <p>The system follows a modular architecture with clear separation of concerns:</p>
-                <h3>Module Breakdown</h3>
-                <ol>
-                    <li><strong>Main Module</strong>
-                        <p>Entry point of the application (<code>main</code>). Handles main menu navigation, coordinates between admin and user modules, and manages program termination and data saving.</p>
-                    </li>
-                    <li><strong>Administrator Module</strong>
-                        <p>Authentication for admin users (hardcoded credentials). Displays an overview dashboard, handles advanced movie management operations (add, edit, remove with search), and purchase report generation (view all purchases).</p>
-                    </li>
-                    <li><strong>User Module</strong>
-                        <p>Manages customer authentication (login) and registration, movie browsing and ticket purchasing, and personal purchase history viewing.</p>
-                    </li>
-                    <li><strong>Data Persistence Module</strong>
-                        <p>Responsible for file I/O operations for all data types, data serialization and deserialization from/to text files, and default data initialization if data files are not found.</p>
-                    </li>
-                     <li><strong>UI/Utility Module</strong>
-                        <p>A collection of helper functions for clearing the screen, pausing, and printing formatted/colored output (headers, success/error messages).</p>
-                    </li>
-                </ol>
-            </section>
-
-            <section id="data-structures">
-                <h2>Data Structures</h2>
-                <h3>Core Data Structures</h3>
-                <h4>1. Movie Structure</h4>
-                <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
+        <section id="data-structures">
+            <h2>Data Structures</h2>
+            <h3>Core Data Structures</h3>
+            <h4>1. Movie Structure</h4>
+            <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
     <span class="c-type">char</span> title[<span class="c-number">200</span>];
     <span class="c-type">char</span> genre[<span class="c-number">100</span>];
 } <span class="c-type">Movie</span>;</code></pre>
-                <p><strong>Purpose:</strong> Stores basic movie information including title and genre classification.</p>
+            <p><strong>Purpose:</strong> Stores basic movie information including title and genre classification.</p>
 
-                <h4>2. Showtime Structure</h4>
-                <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
+            <h4>2. Showtime Structure</h4>
+            <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
     <span class="c-type">char</span> time[<span class="c-number">100</span>];
     <span class="c-type">int</span> price;
     <span class="c-type">int</span> available_Seats;
 } <span class="c-type">Showtime</span>;</code></pre>
-                <p><strong>Purpose:</strong> Manages scheduling, pricing, and availability information for each movie.</p>
+            <p><strong>Purpose:</strong> Manages scheduling, pricing, and availability information for each movie.</p>
 
-                <h4>3. Ticket Structure</h4>
-                <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
+            <h4>3. Ticket Structure</h4>
+            <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
     <span class="c-type">char</span> movie_Title[<span class="c-number">200</span>];
     <span class="c-type">char</span> show_Time[<span class="c-number">50</span>];
     <span class="c-type">int</span> ticket_Count;
@@ -591,18 +620,18 @@
     <span class="c-type">char</span> username[<span class="c-number">50</span>];
     <span class="c-type">char</span> purchase_Date[<span class="c-number">20</span>];
 } <span class="c-type">Ticket</span>;</code></pre>
-                <p><strong>Purpose:</strong> Records individual ticket purchases with complete transaction details, including the purchaser and date.</p>
+            <p><strong>Purpose:</strong> Records individual ticket purchases with complete transaction details, including the purchaser and date.</p>
 
-                <h4>4. User Structure</h4>
-                <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
+            <h4>4. User Structure</h4>
+            <pre><code class="language-c"><span class="c-keyword">typedef struct</span> {
     <span class="c-type">char</span> username[<span class="c-number">50</span>];
     <span class="c-type">char</span> password[<span class="c-number">50</span>];
 } <span class="c-type">User</span>;</code></pre>
-                <p><strong>Purpose:</strong> Stores user authentication credentials.</p>
-                
-                <h3>Global Variables</h3>
-                <h4>Data Arrays & Constants</h4>
-                <pre><code class="language-c"><span class="c-preprocessor">#define MAX_MOVIES 200</span>
+            <p><strong>Purpose:</strong> Stores user authentication credentials.</p>
+            
+            <h3>Global Variables</h3>
+            <h4>Data Arrays & Constants</h4>
+            <pre><code class="language-c"><span class="c-preprocessor">#define MAX_MOVIES 200</span>
 <span class="c-preprocessor">#define MAX_PURCHASES 500</span>
 <span class="c-preprocessor">#define MAX_USERS 200</span>
 
@@ -611,371 +640,370 @@
 <span class="c-type">Ticket</span> all_purchases[MAX_PURCHASES];
 <span class="c-type">User</span> all_users[MAX_USERS];
 </code></pre>
-                <h4>Counters</h4>
-                <pre><code class="language-c"><span class="c-type">int</span> movie_count = <span class="c-number">0</span>;
+            <h4>Counters</h4>
+            <pre><code class="language-c"><span class="c-type">int</span> movie_count = <span class="c-number">0</span>;
 <span class="c-type">int</span> purchase_count = <span class="c-number">0</span>;
 <span class="c-type">int</span> user_count = <span class="c-number">0</span>;</code></pre>
 
-                <h3>Data Relationships</h3>
-                <p>The system maintains parallel arrays where the index <code>i</code> correlates related data:</p>
-                <ul>
-                    <li><code>m[i]</code> and <code>s[i]</code> represent the same movie's information and its corresponding showtime details.</li>
-                    <li><code>all_purchases[i]</code> stores individual purchase records.</li>
-                    <li><code>all_users[i]</code> contains user account information.</li>
-                </ul>
-            </section>
+            <h3>Data Relationships</h3>
+            <p>The system maintains parallel arrays where the index <code>i</code> correlates related data:</p>
+            <ul>
+                <li><code>m[i]</code> and <code>s[i]</code> represent the same movie's information and its corresponding showtime details.</li>
+                <li><code>all_purchases[i]</code> stores individual purchase records.</li>
+                <li><code>all_users[i]</code> contains user account information.</li>
+            </ul>
+        </section>
+        
+        <section id="functions">
+            <h2>Function Documentation</h2>
+
+            <h3 id="functions-main">Main Functions</h3>
+            <h5>main()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Entry point and main program loop.</li>
+                <li><strong>Functionality:</strong> Initializes data by reading from files, displays the main menu, routes to admin/user portals, and saves all data before exiting.</li>
+            </ul>
+
+            <h3 id="functions-admin">Administrator Functions</h3>
+            <h5>admin_panel()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Handles administrator authentication and provides access to the admin menu.</li>
+                <li><strong>Functionality:</strong> Prompts for admin credentials. If valid, it enters a loop showing the admin dashboard and menu, handling all admin-related tasks.</li>
+            </ul>
+             <h5>show_admin_dashboard()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Displays a summary dashboard for the administrator.</li>
+                <li><strong>Functionality:</strong> Calculates and displays total movies, tickets sold, total revenue, and lists the 5 most recent purchases.</li>
+            </ul>
+            <h5>admin_add_movie()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Adds a new movie to the system.</li>
+                <li><strong>Functionality:</strong> Prompts for all movie details, adds them to the arrays, increments <code>movie_count</code>, and saves the updated data.</li>
+            </ul>
+            <h5>admin_edit_movie()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Modifies an existing movie's information using a search.</li>
+                <li><strong>Functionality:</strong> Prompts for a search term, finds the movie using `find_movie_by_title_substr`, and allows the admin to update any field.</li>
+            </ul>
+            <h5>admin_remove_movie()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Removes a movie from the system using a search.</li>
+                <li><strong>Functionality:</strong> Prompts for a search term, finds the movie, asks for confirmation, and removes it by shifting array elements.</li>
+            </ul>
+            <h5>view_all_purchases()</h5>
+             <ul>
+                <li><strong>Purpose:</strong> Displays a complete history of all purchases made in the system.</li>
+                <li><strong>Functionality:</strong> Shows all ticket purchases in a formatted table including ID, date, title, tickets, amount, and username.</li>
+            </ul>
             
-            <section id="functions">
-                <h2>Function Documentation</h2>
-
-                <h3 id="functions-main">Main Functions</h3>
-                <h5>main()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Entry point and main program loop.</li>
-                    <li><strong>Functionality:</strong> Initializes data by reading from files, displays the main menu, routes to admin/user portals, and saves all data before exiting.</li>
-                </ul>
-
-                <h3 id="functions-admin">Administrator Functions</h3>
-                <h5>admin_panel()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Handles administrator authentication and provides access to the admin menu.</li>
-                    <li><strong>Functionality:</strong> Prompts for admin credentials. If valid, it enters a loop showing the admin dashboard and menu, handling all admin-related tasks.</li>
-                </ul>
-                 <h5>show_admin_dashboard()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Displays a summary dashboard for the administrator.</li>
-                    <li><strong>Functionality:</strong> Calculates and displays total movies, tickets sold, total revenue, and lists the 5 most recent purchases.</li>
-                </ul>
-                <h5>admin_add_movie()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Adds a new movie to the system.</li>
-                    <li><strong>Functionality:</strong> Prompts for all movie details, adds them to the arrays, increments <code>movie_count</code>, and saves the updated data.</li>
-                </ul>
-                <h5>admin_edit_movie()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Modifies an existing movie's information using a search.</li>
-                    <li><strong>Functionality:</strong> Prompts for a search term, finds the movie using `find_movie_by_title_substr`, and allows the admin to update any field.</li>
-                </ul>
-                <h5>admin_remove_movie()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Removes a movie from the system using a search.</li>
-                    <li><strong>Functionality:</strong> Prompts for a search term, finds the movie, asks for confirmation, and removes it by shifting array elements.</li>
-                </ul>
-                <h5>view_all_purchases()</h5>
-                 <ul>
-                    <li><strong>Purpose:</strong> Displays a complete history of all purchases made in the system.</li>
-                    <li><strong>Functionality:</strong> Shows all ticket purchases in a formatted table including ID, date, title, tickets, amount, and username.</li>
-                </ul>
-                
-                <h3 id="functions-user">User Functions</h3>
-                 <h5>user_portal()</h5>
-                 <ul>
-                    <li><strong>Purpose:</strong> The main entry point for customers.</li>
-                    <li><strong>Functionality:</strong> Displays a menu with options to Login, Register, or go Back.</li>
-                </ul>
-                <h5>user_login(char* username_buffer)</h5>
-                 <ul>
-                    <li><strong>Purpose:</strong> Authenticates a customer's credentials.</li>
-                    <li><strong>Returns:</strong> `int` (1 for success, 0 for failure).</li>
-                </ul>
-                <h5>user_register()</h5>
-                 <ul>
-                    <li><strong>Purpose:</strong> Registers a new customer account.</li>
-                    <li><strong>Functionality:</strong> Prompts for a new username/password, checks for duplicates, and saves the new user.</li>
-                </ul>
-                <h5>user_menu(const char* username)</h5>
-                 <ul>
-                    <li><strong>Purpose:</strong> Displays the main menu for a logged-in customer.</li>
-                    <li><strong>Functionality:</strong> Provides options to View Movies, Purchase Tickets, View My Purchases, or Logout.</li>
-                </ul>
-                <h5>view_available_movies()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Displays all movies available for booking.</li>
-                    <li><strong>Functionality:</strong> Shows a formatted table of all movies with color-coded seat availability.</li>
-                </ul>
-                <h5>purchase_tickets(const char* username)</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Guides a user through the ticket purchasing process.</li>
-                    <li><strong>Functionality:</strong> Handles movie selection, validates ticket quantity, confirms the purchase, updates data, and prints a formatted receipt.</li>
-                </ul>
-                <h5>view_my_purchases(const char* username)</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Displays the purchase history for the currently logged-in user.</li>
-                    <li><strong>Functionality:</strong> Filters purchases by the user and displays their history and total spending.</li>
-                </ul>
-                
-                <h3 id="functions-persistence">Data Persistence Functions</h3>
-                <h5>Read_Movies() / Write_Movies()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Load/save movie and showtime data from/to <code>movie_list.txt</code>.</li>
-                    <li><strong>Functionality:</strong> <code>Read_Movies()</code> loads data at startup. If the file is missing, it calls <code>Default_Movies()</code> and creates the file. <code>Write_Movies()</code> saves the current movie data.</li>
-                </ul>
-                <h5>Read_Tickets() / Write_Tickets()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Load/save ticket purchase data from/to <code>tickets.txt</code>.</li>
-                </ul>
-                <h5>Read_Users() / Write_Users()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Load/save user account data from/to <code>users.txt</code>.</li>
-                </ul>
-                <h5>Default_Movies()</h5>
-                <ul>
-                    <li><strong>Purpose:</strong> Initializes the system with default movies if <code>movie_list.txt</code> is not found.</li>
-                </ul>
-
-                <h3 id="functions-utility">Utility Functions</h3>
-                <ul>
-                    <li><strong>UI Helpers:</strong> <code>print_header()</code>, <code>print_success()</code>, <code>print_error()</code>, <code>print_info()</code> provide formatted, colored console output. <code>clear_screen()</code> and <code>press_enter_to_continue()</code> manage screen flow.</li>
-                    <li><strong>Input Helpers:</strong> <code>get_menu_choice()</code> safely reads an integer choice. <code>confirm_prompt()</code> gets a Y/N answer.</li>
-                    <li><strong>Logic Helpers:</strong> <code>find_movie_by_title_substr()</code> performs a case-insensitive search for a movie title substring, returning its index or -1 if not found.</li>
-                </ul>
-            </section>
-
-            <section id="flowcharts">
-                <h2>Program Flowcharts</h2>
-                <p>These flowcharts provide a detailed visual representation of the program's logic, from the main application loop to the specific logic within each module.</p>
-                
-                <h3>1. Main Program Flow</h3>
-                <div class="mermaid">
-                graph TD
-                    A[Start Program] --> B[Initialize Data from Files]
-                    B --> C[Display Main Menu]
-                    C --> D{User Choice}
-                    D -->|Admin Login| E[Admin Authentication]
-                    D -->|Customer Portal| F[User Authentication Portal]
-                    D -->|Exit| G[Save All Data to Files]
-                    E --> H{Authentication Successful?}
-                    H -->|Yes| I[Display Admin Dashboard & Menu Loop]
-                    H -->|No| J[Show Error Message]
-                    J --> C
-                    I --> K{Admin Choice}
-                    K -->|Add Movie| L[Admin Add Movie]
-                    K -->|Edit Movie| M[Admin Edit Movie]
-                    K -->|Remove Movie| N[Admin Remove Movie]
-                    K -->|View Movies| O[View Available Movies]
-                    K -->|View Purchases| P[View All Purchases]
-                    K -->|Logout| C
-                    L --> I
-                    M --> I
-                    N --> I
-                    O --> I
-                    P --> I
-                    F --> Q{Portal Choice}
-                    Q -->|Login| R[User Login]
-                    Q -->|Register| S[User Registration]
-                    Q -->|Back| C
-                    R --> T{Login Successful?}
-                    T -->|Yes| U[User Menu Loop]
-                    T -->|No| V[Show Error Message]
-                    V --> F
-                    S --> W{Registration Valid?}
-                    W -->|Yes| X[Show Success Message]
-                    W -->|No| Y[Show Error Message]
-                    X --> F
-                    Y --> F
-                    U --> Z{User Choice}
-                    Z -->|View Movies| O
-                    Z -->|Purchase Tickets| AA[Purchase Tickets]
-                    Z -->|View History| AB[View My Purchases]
-                    Z -->|Logout| F
-                    AA --> U
-                    AB --> U
-                    G --> AC[Exit Program]
-                </div>
-
-                <h3>2. Administrator Module Flow</h3>
-                <div class="mermaid">
-                graph TD
-                    A[Admin Module Start] --> B[Display Admin Login]
-                    B --> C[Enter Username/Password]
-                    C --> D{Hardcoded Credentials Valid?}
-                    D -->|No| E[Show Access Denied]
-                    E --> F[Return to Main Menu]
-                    D -->|Yes| G[Display Admin Dashboard & Menu]
-                    G --> H{Admin Selection}
-                    H -->|Add Movie| I[Add Movie Process]
-                    H -->|Edit Movie| J[Edit Movie Process]
-                    H -->|Remove Movie| K[Remove Movie Process]
-                    H -->|View Movies| L[Display All Movies]
-                    H -->|View Purchases| M[Display All Purchases]
-                    H -->|Logout| N[Return to Main Menu]
-                    I --> O[Enter Movie Details]
-                    O --> P[Add to Arrays & Increment Count]
-                    P --> Q[Write to movie_list.txt]
-                    Q --> R[Show Success Message]
-                    R --> G
-                    J --> S[Search for Movie by Title]
-                    S --> T[Select Movie to Edit]
-                    T --> U[Enter New Values]
-                    U --> V[Update Movie Data]
-                    V --> W[Write to movie_list.txt]
-                    W --> X[Show Success Message]
-                    X --> G
-                    K --> Y[Search for Movie by Title]
-                    Y --> Z[Select Movie to Remove & Confirm]
-                    Z --> AA[Remove from Arrays & Decrement Count]
-                    AA --> AB[Write to movie_list.txt]
-                    AB --> AC[Show Success Message]
-                    AC --> G
-                    L --> AD[Display Movie List]
-                    AD --> AE[Wait for User Input]
-                    AE --> G
-                    M --> AF[Display All Purchases]
-                    AF --> AG[Wait for User Input]
-                    AG --> G
-                </div>
-
-                <h3>3. User Module Flow</h3>
-                <div class="mermaid">
-                graph TD
-                    A[User Module Start] --> B[Display User Menu]
-                    B --> C{User Selection}
-                    C -->|View Movies| D[View Available Movies]
-                    C -->|Purchase Tickets| E[Purchase Tickets Process]
-                    C -->|View History| F[View My Purchases]
-                    C -->|Logout| G[Return to User Portal]
-                    D --> H[Display Formatted Movie List]
-                    H --> I[Wait for User Input]
-                    I --> B
-                    E --> K[List Available Movies]
-                    K --> L[Select Movie]
-                    L --> M{Movie Seats > 0?}
-                    M -->|No| N[Show Sold Out Message]
-                    N --> O[Wait for Input]
-                    O --> B
-                    M -->|Yes| P[Enter Ticket Quantity]
-                    P --> Q{Quantity Valid?}
-                    Q -->|No| R[Show Error Message]
-                    R --> O
-                    Q -->|Yes| S[Calculate Total Price]
-                    S --> T[Show Purchase Summary]
-                    T --> U{Confirm Purchase?}
-                    U -->|No| V[Cancel Purchase]
-                    V --> O
-                    U -->|Yes| W[Process Purchase]
-                    W --> X[Update Seat Count]
-                    X --> Y[Record Transaction & Date]
-                    Y --> Z[Show Ticket Receipt]
-                    Z --> O
-                    F --> AA[Filter Purchases by Current User]
-                    AA --> AB[Display Purchase History]
-                    AB --> AC[Calculate & Display Total Spent]
-                    AC --> AD[Wait for User Input]
-                    AD --> B
-                </div>
-                
-                <h3>4. Authentication Flow</h3>
-                <div class="mermaid">
-                graph TD
-                    A[Start] --> B[Main Menu]
-                    B -->|Select 'Admin Login'| C[Enter Admin Username & Password]
-                    B -->|Select 'Customer Portal'| D[Display Portal: Login / Register / Back]
-
-                    C --> E{Credentials Match Hardcoded List?}
-                    E -->|Yes| F[Login Success, Proceed to Admin Menu]
-                    E -->|No| G[Show Error, Return to Main Menu]
-                    G --> B
-
-                    D --> H{Portal Choice}
-                    H -->|Register| I[Enter New Username]
-                    H -->|Login| J[Enter Username & Password]
-                    H -->|Back| B
-
-                    I --> K{Username Exists in File?}
-                    K -->|Yes| L[Show 'Username Taken' Error]
-                    L --> D
-                    K -->|No| M[Enter New Password]
-                    M --> N[Add User to Array]
-                    N --> O[Write Users Array to File]
-                    O --> P[Show 'Registration Success']
-                    P --> D
-
-                    J --> Q[Search Users Array]
-                    Q --> R{User Found and Password Matches?}
-                    R -->|No| S[Show 'Invalid Credentials' Error]
-                    S --> D
-                    R -->|Yes| T[Login Success, Proceed to User Menu]
-                </div>
-
-                <h3>5. Data Persistence Flow</h3>
-                <div class="mermaid">
-                graph TD
-                    A[Program Start] --> B[Read users.txt into Array]
-                    B --> C[Read tickets.txt into Array]
-                    C --> D[Attempt to Read movie_list.txt]
-                    D --> E{File Found?}
-                    E -->|No| F[Create Default Movie List in Array]
-                    F --> G[Write Default Movies to new movie_list.txt]
-                    E -->|Yes| H[Load Movie Data from File into Arrays]
-                    G --> I[Proceed to Main Program Loop]
-                    H --> I
-                    I --> J{Program Exit Triggered?}
-                    J -->|No| I
-                    J -->|Yes| K[Write Movies Array to movie_list.txt]
-                    K --> L[Write Purchases Array to tickets.txt]
-                    L --> M[Write Users Array to users.txt]
-                    M --> N[Program Exit]
-                </div>
-            </section>
+            <h3 id="functions-user">User Functions</h3>
+             <h5>user_portal()</h5>
+             <ul>
+                <li><strong>Purpose:</strong> The main entry point for customers.</li>
+                <li><strong>Functionality:</strong> Displays a menu with options to Login, Register, or go Back.</li>
+            </ul>
+            <h5>user_login(char* username_buffer)</h5>
+             <ul>
+                <li><strong>Purpose:</strong> Authenticates a customer's credentials.</li>
+                <li><strong>Returns:</strong> `int` (1 for success, 0 for failure).</li>
+            </ul>
+            <h5>user_register()</h5>
+             <ul>
+                <li><strong>Purpose:</strong> Registers a new customer account.</li>
+                <li><strong>Functionality:</strong> Prompts for a new username/password, checks for duplicates, and saves the new user.</li>
+            </ul>
+            <h5>user_menu(const char* username)</h5>
+             <ul>
+                <li><strong>Purpose:</strong> Displays the main menu for a logged-in customer.</li>
+                <li><strong>Functionality:</strong> Provides options to View Movies, Purchase Tickets, View My Purchases, or Logout.</li>
+            </ul>
+            <h5>view_available_movies()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Displays all movies available for booking.</li>
+                <li><strong>Functionality:</strong> Shows a formatted table of all movies with color-coded seat availability.</li>
+            </ul>
+            <h5>purchase_tickets(const char* username)</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Guides a user through the ticket purchasing process.</li>
+                <li><strong>Functionality:</strong> Handles movie selection, validates ticket quantity, confirms the purchase, updates data, and prints a formatted receipt.</li>
+            </ul>
+            <h5>view_my_purchases(const char* username)</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Displays the purchase history for the currently logged-in user.</li>
+                <li><strong>Functionality:</strong> Filters purchases by the user and displays their history and total spending.</li>
+            </ul>
             
-            <section id="file-io">
-                <h2>File I/O and Data Persistence</h2>
-                <p>The system relies on three separate text files to persist data across sessions. All files are read upon startup and written to upon program exit or when critical data is changed (e.g., adding a movie).</p>
-                
-                <h4>1. <code>movie_list.txt</code></h4>
-                <ul><li><strong>Format:</strong> 5 lines per movie (Title, Genre, Showtime, Price, Available Seats).</li></ul>
+            <h3 id="functions-persistence">Data Persistence Functions</h3>
+            <h5>Read_Movies() / Write_Movies()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Load/save movie and showtime data from/to <code>movie_list.txt</code>.</li>
+                <li><strong>Functionality:</strong> <code>Read_Movies()</code> loads data at startup. If the file is missing, it calls <code>Default_Movies()</code> and creates the file. <code>Write_Movies()</code> saves the current movie data.</li>
+            </ul>
+            <h5>Read_Tickets() / Write_Tickets()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Load/save ticket purchase data from/to <code>tickets.txt</code>.</li>
+            </ul>
+            <h5>Read_Users() / Write_Users()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Load/save user account data from/to <code>users.txt</code>.</li>
+            </ul>
+            <h5>Default_Movies()</h5>
+            <ul>
+                <li><strong>Purpose:</strong> Initializes the system with default movies if <code>movie_list.txt</code> is not found.</li>
+            </ul>
 
-                <h4>2. <code>tickets.txt</code></h4>
-                <ul><li><strong>Format:</strong> 6 lines per purchase (Movie Title, Showtime, Ticket Count, Total Amount, Username, Purchase Date).</li></ul>
+            <h3 id="functions-utility">Utility Functions</h3>
+            <ul>
+                <li><strong>UI Helpers:</strong> <code>print_header()</code>, <code>print_success()</code>, <code>print_error()</code>, <code>print_info()</code> provide formatted, colored console output. <code>clear_screen()</code> and <code>press_enter_to_continue()</code> manage screen flow.</li>
+                <li><strong>Input Helpers:</strong> <code>get_menu_choice()</code> safely reads an integer choice. <code>confirm_prompt()</code> gets a Y/N answer.</li>
+                <li><strong>Logic Helpers:</strong> <code>find_movie_by_title_substr()</code> performs a case-insensitive search for a movie title substring, returning its index or -1 if not found.</li>
+            </ul>
+        </section>
 
-                <h4>3. <code>users.txt</code></h4>
-                <ul><li><strong>Format:</strong> 1 line per user: <code>username password</code> (space-separated).</li></ul>
-
-                <h3>Data Integrity Measures</h3>
-                <ul>
-                    <li><strong>File Existence Check:</strong> When reading <code>movie_list.txt</code>, if the file does not exist, the system populates itself with default movies and creates the file, ensuring the application can always run. Other read functions simply return if the file is missing.</li>
-                    <li><strong>Safe Reading:</strong> <code>fgets</code> is used to read lines, preventing buffer overflows. <code>sscanf</code> is used to parse numbers and strings safely from buffers.</li>
-                    <li><strong>Data Synchronization:</strong> Data is written back to files immediately after a state change (e.g., after adding a movie, registering a user, or purchasing a ticket) and also as a final step before the program exits, ensuring data consistency.</li>
-                </ul>
-            </section>
+        <section id="flowcharts">
+            <h2>Program Flowcharts</h2>
+            <p>These flowcharts provide a detailed visual representation of the program's logic, from the main application loop to the specific logic within each module.</p>
             
-            <section id="navigation">
-                <h2>Navigating the System: Screen by Screen</h2>
-                <p>This section provides a complete, screen-by-screen walkthrough of the entire application.</p>
+            <h3>1. Main Program Flow</h3>
+            <div class="mermaid">
+            graph TD
+                A[Start Program] --> B[Initialize Data from Files]
+                B --> C[Display Main Menu]
+                C --> D{User Choice}
+                D -->|Admin Login| E[Admin Authentication]
+                D -->|Customer Portal| F[User Authentication Portal]
+                D -->|Exit| G[Save All Data to Files]
+                E --> H{Authentication Successful?}
+                H -->|Yes| I[Display Admin Dashboard & Menu Loop]
+                H -->|No| J[Show Error Message]
+                J --> C
+                I --> K{Admin Choice}
+                K -->|Add Movie| L[Admin Add Movie]
+                K -->|Edit Movie| M[Admin Edit Movie]
+                K -->|Remove Movie| N[Admin Remove Movie]
+                K -->|View Movies| O[View Available Movies]
+                K -->|View Purchases| P[View All Purchases]
+                K -->|Logout| C
+                L --> I
+                M --> I
+                N --> I
+                O --> I
+                P --> I
+                F --> Q{Portal Choice}
+                Q -->|Login| R[User Login]
+                Q -->|Register| S[User Registration]
+                Q -->|Back| C
+                R --> T{Login Successful?}
+                T -->|Yes| U[User Menu Loop]
+                T -->|No| V[Show Error Message]
+                V --> F
+                S --> W{Registration Valid?}
+                W -->|Yes| X[Show Success Message]
+                W -->|No| Y[Show Error Message]
+                X --> F
+                Y --> F
+                U --> Z{User Choice}
+                Z -->|View Movies| O
+                Z -->|Purchase Tickets| AA[Purchase Tickets]
+                Z -->|View History| AB[View My Purchases]
+                Z -->|Logout| F
+                AA --> U
+                AB --> U
+                G --> AC[Exit Program]
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>1. Main Menu</h4>
-                    <p>This is the application's entry point.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <h3>2. Administrator Module Flow</h3>
+            <div class="mermaid">
+            graph TD
+                A[Admin Module Start] --> B[Display Admin Login]
+                B --> C[Enter Username/Password]
+                C --> D{Hardcoded Credentials Valid?}
+                D -->|No| E[Show Access Denied]
+                E --> F[Return to Main Menu]
+                D -->|Yes| G[Display Admin Dashboard & Menu]
+                G --> H{Admin Selection}
+                H -->|Add Movie| I[Add Movie Process]
+                H -->|Edit Movie| J[Edit Movie Process]
+                H -->|Remove Movie| K[Remove Movie Process]
+                H -->|View Movies| L[Display All Movies]
+                H -->|View Purchases| M[Display All Purchases]
+                H -->|Logout| N[Return to Main Menu]
+                I --> O[Enter Movie Details]
+                O --> P[Add to Arrays & Increment Count]
+                P --> Q[Write to movie_list.txt]
+                Q --> R[Show Success Message]
+                R --> G
+                J --> S[Search for Movie by Title]
+                S --> T[Select Movie to Edit]
+                T --> U[Enter New Values]
+                U --> V[Update Movie Data]
+                V --> W[Write to movie_list.txt]
+                W --> X[Show Success Message]
+                X --> G
+                K --> Y[Search for Movie by Title]
+                Y --> Z[Select Movie to Remove & Confirm]
+                Z --> AA[Remove from Arrays & Decrement Count]
+                AA --> AB[Write to movie_list.txt]
+                AB --> AC[Show Success Message]
+                AC --> G
+                L --> AD[Display Movie List]
+                AD --> AE[Wait for User Input]
+                AE --> G
+                M --> AF[Display All Purchases]
+                AF --> AG[Wait for User Input]
+                AG --> G
+            </div>
+
+            <h3>3. User Module Flow</h3>
+            <div class="mermaid">
+            graph TD
+                A[User Module Start] --> B[Display User Menu]
+                B --> C{User Selection}
+                C -->|View Movies| D[View Available Movies]
+                C -->|Purchase Tickets| E[Purchase Tickets Process]
+                C -->|View History| F[View My Purchases]
+                C -->|Logout| G[Return to User Portal]
+                D --> H[Display Formatted Movie List]
+                H --> I[Wait for User Input]
+                I --> B
+                E --> K[List Available Movies]
+                K --> L[Select Movie]
+                L --> M{Movie Seats > 0?}
+                M -->|No| N[Show Sold Out Message]
+                N --> O[Wait for Input]
+                O --> B
+                M -->|Yes| P[Enter Ticket Quantity]
+                P --> Q{Quantity Valid?}
+                Q -->|No| R[Show Error Message]
+                R --> O
+                Q -->|Yes| S[Calculate Total Price]
+                S --> T[Show Purchase Summary]
+                T --> U{Confirm Purchase?}
+                U -->|No| V[Cancel Purchase]
+                V --> O
+                U -->|Yes| W[Process Purchase]
+                W --> X[Update Seat Count]
+                X --> Y[Record Transaction & Date]
+                Y --> Z[Show Ticket Receipt]
+                Z --> O
+                F --> AA[Filter Purchases by Current User]
+                AA --> AB[Display Purchase History]
+                AB --> AC[Calculate & Display Total Spent]
+                AC --> AD[Wait for User Input]
+                AD --> B
+            </div>
+            
+            <h3>4. Authentication Flow</h3>
+            <div class="mermaid">
+            graph TD
+                A[Start] --> B[Main Menu]
+                B -->|Select 'Admin Login'| C[Enter Admin Username & Password]
+                B -->|Select 'Customer Portal'| D[Display Portal: Login / Register / Back]
+
+                C --> E{Credentials Match Hardcoded List?}
+                E -->|Yes| F[Login Success, Proceed to Admin Menu]
+                E -->|No| G[Show Error, Return to Main Menu]
+                G --> B
+
+                D --> H{Portal Choice}
+                H -->|Register| I[Enter New Username]
+                H -->|Login| J[Enter Username & Password]
+                H -->|Back| B
+
+                I --> K{Username Exists in File?}
+                K -->|Yes| L[Show 'Username Taken' Error]
+                L --> D
+                K -->|No| M[Enter New Password]
+                M --> N[Add User to Array]
+                N --> O[Write Users Array to File]
+                O --> P[Show 'Registration Success']
+                P --> D
+
+                J --> Q[Search Users Array]
+                Q --> R{User Found and Password Matches?}
+                R -->|No| S[Show 'Invalid Credentials' Error]
+                S --> D
+                R -->|Yes| T[Login Success, Proceed to User Menu]
+            </div>
+
+            <h3>5. Data Persistence Flow</h3>
+            <div class="mermaid">
+            graph TD
+                A[Program Start] --> B[Read users.txt into Array]
+                B --> C[Read tickets.txt into Array]
+                C --> D[Attempt to Read movie_list.txt]
+                D --> E{File Found?}
+                E -->|No| F[Create Default Movie List in Array]
+                F --> G[Write Default Movies to new movie_list.txt]
+                E -->|Yes| H[Load Movie Data from File into Arrays]
+                G --> I[Proceed to Main Program Loop]
+                H --> I
+                I --> J{Program Exit Triggered?}
+                J -->|No| I
+                J -->|Yes| K[Write Movies Array to movie_list.txt]
+                K --> L[Write Purchases Array to tickets.txt]
+                L --> M[Write Users Array to users.txt]
+                M --> N[Program Exit]
+            </div>
+        </section>
+        
+        <section id="file-io">
+            <h2>File I/O and Data Persistence</h2>
+            <p>The system relies on three separate text files to persist data across sessions. All files are read upon startup and written to upon program exit or when critical data is changed (e.g., adding a movie).</p>
+            
+            <h4>1. <code>movie_list.txt</code></h4>
+            <ul><li><strong>Format:</strong> 5 lines per movie (Title, Genre, Showtime, Price, Available Seats).</li></ul>
+
+            <h4>2. <code>tickets.txt</code></h4>
+            <ul><li><strong>Format:</strong> 6 lines per purchase (Movie Title, Showtime, Ticket Count, Total Amount, Username, Purchase Date).</li></ul>
+
+            <h4>3. <code>users.txt</code></h4>
+            <ul><li><strong>Format:</strong> 1 line per user: <code>username password</code> (space-separated).</li></ul>
+
+            <h3>Data Integrity Measures</h3>
+            <ul>
+                <li><strong>File Existence Check:</strong> When reading <code>movie_list.txt</code>, if the file does not exist, the system populates itself with default movies and creates the file, ensuring the application can always run. Other read functions simply return if the file is missing.</li>
+                <li><strong>Safe Reading:</strong> <code>fgets</code> is used to read lines, preventing buffer overflows. <code>sscanf</code> is used to parse numbers and strings safely from buffers.</li>
+                <li><strong>Data Synchronization:</strong> Data is written back to files immediately after a state change (e.g., after adding a movie, registering a user, or purchasing a ticket) and also as a final step before the program exits, ensuring data consistency.</li>
+            </ul>
+        </section>
+        
+        <section id="navigation">
+            <h2>Navigating the System: Screen by Screen</h2>
+            <p>This section provides a complete, screen-by-screen walkthrough of the entire application.</p>
+
+            <div class="screen-walkthrough">
+                <h4>1. Main Menu</h4>
+                <p>This is the application's entry point.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                       JHS-CinePlex - Management & Booking
 ================================================================================
-
    [1] Admin Login
    [2] Customer Login / Register
    [3] Exit
 
 <span class="prompt">&gt;&gt; Enter your choice: </span></div></div>
-                    <p><strong>Interaction:</strong> Enter <code>1</code> for Admin, <code>2</code> for Customer, or <code>3</code> to save data and exit.</p>
-                </div>
+                <p><strong>Interaction:</strong> Enter <code>1</code> for Admin, <code>2</code> for Customer, or <code>3</code> to save data and exit.</p>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>2. Admin Login</h4>
-                    <p>Authorized administrators access the management panel here.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>2. Admin Login</h4>
+                <p>Authorized administrators access the management panel here.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                  Admin Login
 ================================================================================
 
 <span class="prompt">Enter Admin Username:</span> <span class="user-input">Hasib</span>
 <span class="prompt">Enter Admin Password:</span> <span class="user-input">hasib123</span></div></div>
-                    <strong>Possible Outcomes:</strong>
-                    <div class="outcome"><span class="success">[SUCCESS]</span> Login successful.</div>
-                    <div class="outcome"><span class="error">[ERROR]</span> Incorrect username or password. Access denied.</div>
-                </div>
+                <strong>Possible Outcomes:</strong>
+                <div class="outcome"><span class="success">[SUCCESS]</span> Login successful.</div>
+                <div class="outcome"><span class="error">[ERROR]</span> Incorrect username or password. Access denied.</div>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>3. Admin Dashboard and Menu</h4>
-                    <p>The central hub for all administrative tasks.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>3. Admin Dashboard and Menu</h4>
+                <p>The central hub for all administrative tasks.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                 Admin Dashboard
 ================================================================================
   Total Movies:   5
@@ -994,13 +1022,13 @@
    [6] Logout
 
 <span class="prompt">&gt;&gt; Enter your choice: </span></div></div>
-                    <p><strong>Interaction:</strong> View the dashboard summary and then enter a number to select a management task.</p>
-                </div>
-                
-                <div class="screen-walkthrough">
-                    <h4>4. Admin: Add New Movie</h4>
-                     <p>Prompts the admin to enter details for a new movie.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+                <p><strong>Interaction:</strong> View the dashboard summary and then enter a number to select a management task.</p>
+            </div>
+            
+            <div class="screen-walkthrough">
+                <h4>4. Admin: Add New Movie</h4>
+                 <p>Prompts the admin to enter details for a new movie.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                               [+] Add New Movie
 ================================================================================
 <span class="prompt">Enter Title (0 to cancel):</span> <span class="user-input">Oppenheimer</span>
@@ -1008,19 +1036,19 @@
 <span class="prompt">Enter Showtime (e.g., 08:00 PM - 10:00 PM):</span> <span class="user-input">07:00 PM - 10:00 PM</span>
 <span class="prompt">Enter Price:</span> <span class="user-input">600</span>
 <span class="prompt">Enter Available Seats:</span> <span class="user-input">150</span></div></div>
-                     <strong>Outcome:</strong> <div class="outcome"><span class="success">[SUCCESS]</span> Movie added successfully!</div>
-                </div>
+                 <strong>Outcome:</strong> <div class="outcome"><span class="success">[SUCCESS]</span> Movie added successfully!</div>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>5. Admin: Edit Movie</h4>
-                    <p>A two-step process: search then edit.</p>
-                    <strong>Screen (Step 1: Search)</strong>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>5. Admin: Edit Movie</h4>
+                <p>A two-step process: search then edit.</p>
+                <strong>Screen (Step 1: Search)</strong>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                  ~ Edit Movie
 ================================================================================
 <span class="prompt">Enter a title (or part) to search (0 to cancel):</span> <span class="user-input">potter</span></div></div>
-                    <strong>Screen (Step 2: Edit)</strong>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">Found: Harry Potter and the Goblet of Fire (Fantasy)
+                <strong>Screen (Step 2: Edit)</strong>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">Found: Harry Potter and the Goblet of Fire (Fantasy)
 Showtime: 05:00 PM - 08:00 PM | Price: 500 | Seats: 0
 
 Press Enter to keep current value.
@@ -1029,42 +1057,42 @@ Press Enter to keep current value.
 <span class="prompt">New Showtime:</span> <span class="user-input"></span>
 <span class="prompt">New Price:</span> <span class="user-input">550</span>
 <span class="prompt">New Seats:</span> <span class="user-input">100</span></div></div>
-                    <strong>Outcome:</strong> <div class="outcome"><span class="success">[SUCCESS]</span> Movie updated.</div>
-                </div>
-                
-                <div class="screen-walkthrough">
-                    <h4>6. Admin: Remove Movie</h4>
-                     <p>A two-step process: search then confirm.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+                <strong>Outcome:</strong> <div class="outcome"><span class="success">[SUCCESS]</span> Movie updated.</div>
+            </div>
+            
+            <div class="screen-walkthrough">
+                <h4>6. Admin: Remove Movie</h4>
+                 <p>A two-step process: search then confirm.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                [-] Remove Movie
 ================================================================================
 <span class="prompt">Enter a title (or part) to search (0 to cancel):</span> <span class="user-input">baby</span>
 
 Found: Boss Baby (Family / Comedy) - Seats: 50 - Price: 200
 <span class="prompt">Confirm removal? (Y/N):</span> <span class="user-input">Y</span></div></div>
-                    <strong>Possible Outcomes:</strong>
-                    <div class="outcome"><span class="success">[SUCCESS]</span> Movie removed.</div>
-                    <div class="outcome"><span class="info">[INFO]</span> Removal cancelled.</div>
-                    <div class="outcome"><span class="error">[ERROR]</span> Movie not found.</div>
-                </div>
+                <strong>Possible Outcomes:</strong>
+                <div class="outcome"><span class="success">[SUCCESS]</span> Movie removed.</div>
+                <div class="outcome"><span class="info">[INFO]</span> Removal cancelled.</div>
+                <div class="outcome"><span class="error">[ERROR]</span> Movie not found.</div>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>7. Admin: View All Purchases</h4>
-                    <p>A system-wide overview of all transactions from all users.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>7. Admin: View All Purchases</h4>
+                <p>A system-wide overview of all transactions from all users.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                              All Purchase History
 ================================================================================
 ID    Date         Movie                Tickets  Amount   User      
 ---------------------------------------------------------------------
 #1    2024-05-21   Hereditary           2        400      john_doe  
 #2    2024-05-21   The Notebook         1        200      jane_doe</div></div>
-                    <p><strong>Interaction:</strong> This is a view-only screen. Press Enter to return.</p>
-                </div>
+                <p><strong>Interaction:</strong> This is a view-only screen. Press Enter to return.</p>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>8. Customer Portal</h4>
-                    <p>The entry point for customers.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>8. Customer Portal</h4>
+                <p>The entry point for customers.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                 Customer Portal
 ================================================================================
 
@@ -1073,41 +1101,41 @@ ID    Date         Movie                Tickets  Amount   User
    [3] Back
 
 <span class="prompt">&gt;&gt; Enter your choice:</span></div></div>
-                    <p><strong>Interaction:</strong> `1` for Login, `2` for Register, `3` to return to the Main Menu.</p>
-                </div>
+                <p><strong>Interaction:</strong> `1` for Login, `2` for Register, `3` to return to the Main Menu.</p>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>9. Customer Registration</h4>
-                    <p>New users can create an account here.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>9. Customer Registration</h4>
+                <p>New users can create an account here.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                            New User Registration
 ================================================================================
 
 <span class="prompt">Enter a new username (0 to cancel):</span> <span class="user-input">new_user</span>
 <span class="prompt">Enter a new password:</span> <span class="user-input">new_password123</span></div></div>
-                    <strong>Possible Outcomes:</strong>
-                    <div class="outcome"><span class="success">[SUCCESS]</span> Registration successful! You can now log in.</div>
-                    <div class="outcome"><span class="error">[ERROR]</span> Username already exists.</div>
-                </div>
+                <strong>Possible Outcomes:</strong>
+                <div class="outcome"><span class="success">[SUCCESS]</span> Registration successful! You can now log in.</div>
+                <div class="outcome"><span class="error">[ERROR]</span> Username already exists.</div>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>10. Customer Login</h4>
-                    <p>Here, existing users enter their credentials to access their accounts.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>10. Customer Login</h4>
+                <p>Here, existing users enter their credentials to access their accounts.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                 Customer Login
 ================================================================================
 
 <span class="prompt">Enter Username:</span> <span class="user-input">new_user</span>
 <span class="prompt">Enter Password:</span> <span class="user-input">new_password123</span></div></div>
-                    <strong>Possible Outcomes:</strong>
-                    <div class="outcome"><span class="success">[SUCCESS]</span> Login successful!</div>
-                    <div class="outcome"><span class="error">[ERROR]</span> Invalid username or password.</div>
-                </div>
+                <strong>Possible Outcomes:</strong>
+                <div class="outcome"><span class="success">[SUCCESS]</span> Login successful!</div>
+                <div class="outcome"><span class="error">[ERROR]</span> Invalid username or password.</div>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>11. Customer Menu</h4>
-                    <p>The main dashboard for a logged-in customer.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>11. Customer Menu</h4>
+                <p>The main dashboard for a logged-in customer.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                               Welcome, new_user!
 ================================================================================
    [1] View Available Movies
@@ -1116,30 +1144,30 @@ ID    Date         Movie                Tickets  Amount   User
    [4] Logout
 
 <span class="prompt">&gt;&gt; Enter your choice:</span></div></div>
-                    <p><strong>Interaction:</strong> Enter a number corresponding to your desired action.</p>
-                </div>
+                <p><strong>Interaction:</strong> Enter a number corresponding to your desired action.</p>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>12. Customer: View Available Movies</h4>
-                    <p>This screen displays all movies in the system in a clean, tabular format.</p>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>12. Customer: View Available Movies</h4>
+                <p>This screen displays all movies in the system in a clean, tabular format.</p>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                Available Movies
 ================================================================================
 No.  Title                          Genre              Price    Seats   
 ----------------------------------------------------------------------------
-1    Hereditary                     Horror             200      50      
-2    The Notebook                   Romantic           200      10      
-3    Boss Baby                      Family / Comedy    200      50      
+1    Hereditary                     Horror             200      <span class="success">50      </span>
+2    The Notebook                   Romantic           200      <span class="success">10      </span>
+3    Boss Baby                      Family / Comedy    200      <span class="success">50      </span>
 4    Harry Potter and the Goblet... Fantasy            500      <span class="error">SOLD OUT</span>
 ...</div></div>
-                    <p><strong>Interaction:</strong> View-only screen showing all movies. Seat availability is color-coded. Press Enter to return.</p>
-                </div>
+                <p><strong>Interaction:</strong> View-only screen showing all movies. Seat availability is color-coded. Press Enter to return.</p>
+            </div>
 
-                 <div class="screen-walkthrough">
-                    <h4>13. Customer: Purchase Tickets</h4>
-                    <p>A multi-step process for purchasing tickets.</p>
-                    <strong>Screen (Step 1: Select Movie)</strong>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+             <div class="screen-walkthrough">
+                <h4>13. Customer: Purchase Tickets</h4>
+                <p>A multi-step process for purchasing tickets.</p>
+                <strong>Screen (Step 1: Select Movie)</strong>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                Purchase Tickets
 ================================================================================
    [1] Hereditary (Horror) - Seats: 50
@@ -1148,8 +1176,8 @@ No.  Title                          Genre              Price    Seats
    [0] Back
 
 <span class="prompt">&gt;&gt; Enter movie number:</span> <span class="user-input">1</span></div></div>
-                    <strong>Screen (Step 2: Enter Quantity & Confirm)</strong>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">Selected: 'Hereditary' | Available Seats: 50
+                <strong>Screen (Step 2: Enter Quantity & Confirm)</strong>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">Selected: 'Hereditary' | Available Seats: 50
 <span class="prompt">&gt;&gt; Enter number of tickets to buy:</span> <span class="user-input">2</span>
 
 --- Purchase Summary ---
@@ -1159,8 +1187,8 @@ No.  Title                          Genre              Price    Seats
    Total:   BDT 400
 ------------------------
 <span class="prompt">Confirm purchase? (Y/N):</span> <span class="user-input">Y</span></div></div>
-                    <strong>Screen (Step 3: Receipt)</strong>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+                <strong>Screen (Step 3: Receipt)</strong>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                                 Ticket Receipt
 ================================================================================
 +-----------------------------------------------+
@@ -1173,13 +1201,13 @@ No.  Title                          Genre              Price    Seats
   Date : 2024-05-21                             
 +-----------------------------------------------+
 <span class="success">[SUCCESS] Purchase successful!</span></div></div>
-                </div>
+            </div>
 
-                <div class="screen-walkthrough">
-                    <h4>14. Customer: View My Purchases</h4>
-                     <p>This screen shows a table of all tickets purchased by the logged-in user.</p>
-                    <strong>Screen (With History)</strong>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
+            <div class="screen-walkthrough">
+                <h4>14. Customer: View My Purchases</h4>
+                 <p>This screen shows a table of all tickets purchased by the logged-in user.</p>
+                <strong>Screen (With History)</strong>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">================================================================================
                         Purchase History for new_user
 ================================================================================
 Date         Movie Title                    Tickets  Amount   
@@ -1187,57 +1215,57 @@ Date         Movie Title                    Tickets  Amount
 2024-05-21   Hereditary                     2        400      
 ---------------------------------------------------------------
 Total Spent: BDT 400</div></div>
-                    <strong>Screen (No History)</strong>
-                    <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">...
+                <strong>Screen (No History)</strong>
+                <div class="terminal-window"><div class="terminal-header"><div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div></div><div class="terminal-body">...
 ---------------------------------------------------------------
 <span class="info">[INFO] You have not made any purchases yet.</span></div></div>
-                </div>
-            </section>
-            
-            <section id="limitations">
-                <h2>Limitations and Future Improvements</h2>
+            </div>
+        </section>
+        
+        <section id="limitations">
+            <h2>Limitations and Future Improvements</h2>
 
-                <h3 id="limitations-current">Current Limitations</h3>
-                <ul>
-                    <li><strong>Security:</strong> Passwords are stored in plaintext in <code>users.txt</code>. Admin credentials are hardcoded in the source.</li>
-                    <li><strong>Data Management:</strong> Uses fixed-size arrays (<code>200</code> movies, <code>500</code> purchases, <code>200</code> users), which could overflow. Data is managed in memory, which is not suitable for very large datasets.</li>
-                    <li><strong>Concurrency:</strong> The system is single-user and does not support simultaneous operations.</li>
-                    <li><strong>User Interface:</strong> The <code>clear_screen()</code> function uses <code>system("cls")</code>, making it specific to Windows. While admins can search movies to edit/remove, customers cannot search or filter the movie list.</li>
-                    <li><strong>Business Logic:</strong> No support for seat selection (only a counter), promo codes, or ticket cancellations/refunds.</li>
-                </ul>
+            <h3 id="limitations-current">Current Limitations</h3>
+            <ul>
+                <li><strong>Security:</strong> Passwords are stored in plaintext in <code>users.txt</code>. Admin credentials are hardcoded in the source.</li>
+                <li><strong>Data Management:</strong> Uses fixed-size arrays (<code>200</code> movies, <code>500</code> purchases, <code>200</code> users), which could overflow. Data is managed in memory, which is not suitable for very large datasets.</li>
+                <li><strong>Concurrency:</strong> The system is single-user and does not support simultaneous operations.</li>
+                <li><strong>User Interface:</strong> The <code>clear_screen()</code> function uses <code>system("cls")</code>, making it specific to Windows. While admins can search movies to edit/remove, customers cannot search or filter the movie list.</li>
+                <li><strong>Business Logic:</strong> No support for seat selection (only a counter), promo codes, or ticket cancellations/refunds.</li>
+            </ul>
 
-                <h3 id="limitations-future">Future Improvements</h3>
-                <ul>
-                    <li><strong>Security:</strong> Implement password hashing (e.g., using a library like OpenSSL for SHA-256 or a dedicated library for Argon2/bcrypt). Admin credentials could be moved to a configuration file.</li>
-                    <li><strong>Data Management:</strong>
-                        <ul>
-                            <li>Replace fixed-size arrays with dynamically allocated memory (<code>malloc</code>, <code>realloc</code>) for scalability.</li>
-                            <li>Migrate from flat text files to a lightweight database like <strong>SQLite</strong> for more robust, efficient, and scalable data handling. This would also eliminate linear searches.</li>
-                        </ul>
-                    </li>
-                    <li><strong>User Interface:</strong>
-                        <ul>
-                             <li>Add cross-platform screen clearing (e.g., using a preprocessor directive: <code>#ifdef _WIN32 ... #else ... #endif</code>).</li>
-                            <li>Implement search and filtering capabilities for customers (e.g., filter by genre, search by title).</li>
-                        </ul>
-                    </li>
-                     <li><strong>Business Logic:</strong>
-                        <ul>
-                            <li>Implement a seat map for visual seat selection (e.g., a 2D array representing seats).</li>
-                            <li>Add a system for discount codes and promotions.</li>
-                            <li>Introduce functionality for users to cancel their bookings within a certain timeframe.</li>
-                        </ul>
-                    </li>
-                    <li><strong>Performance:</strong> For file-based storage, implement more efficient search algorithms (like binary search on a sorted list) instead of linear scans to improve performance as the data grows.</li>
-                    <li><strong>Advanced Features:</strong> Add features like email notifications for ticket purchases, a reporting system for admins (e.g., revenue by movie), and user roles/permissions.</li>
-                </ul>
-            </section>
+            <h3 id="limitations-future">Future Improvements</h3>
+            <ul>
+                <li><strong>Security:</strong> Implement password hashing (e.g., using a library like OpenSSL for SHA-256 or a dedicated library for Argon2/bcrypt). Admin credentials could be moved to a configuration file.</li>
+                <li><strong>Data Management:</strong>
+                    <ul>
+                        <li>Replace fixed-size arrays with dynamically allocated memory (<code>malloc</code>, <code>realloc</code>) for scalability.</li>
+                        <li>Migrate from flat text files to a lightweight database like <strong>SQLite</strong> for more robust, efficient, and scalable data handling. This would also eliminate linear searches.</li>
+                    </ul>
+                </li>
+                <li><strong>User Interface:</strong>
+                    <ul>
+                         <li>Add cross-platform screen clearing (e.g., using a preprocessor directive: <code>#ifdef _WIN32 ... #else ... #endif</code>).</li>
+                        <li>Implement search and filtering capabilities for customers (e.g., filter by genre, search by title).</li>
+                    </ul>
+                </li>
+                 <li><strong>Business Logic:</strong>
+                    <ul>
+                        <li>Implement a seat map for visual seat selection (e.g., a 2D array representing seats).</li>
+                        <li>Add a system for discount codes and promotions.</li>
+                        <li>Introduce functionality for users to cancel their bookings within a certain timeframe.</li>
+                    </ul>
+                </li>
+                <li><strong>Performance:</strong> For file-based storage, implement more efficient search algorithms (like binary search on a sorted list) instead of linear scans to improve performance as the data grows.</li>
+                <li><strong>Advanced Features:</strong> Add features like email notifications for ticket purchases, a reporting system for admins (e.g., revenue by movie), and user roles/permissions.</li>
+            </ul>
+        </section>
+        
+        <section id="dev-notes">
+            <h2>Development Notes</h2>
             
-            <section id="dev-notes">
-                <h2>Development Notes</h2>
-                
-                <h3 id="dev-notes-org">Code Organization</h3>
-                <p>The code is currently in a single C file. For future development, it should be split into multiple files for better organization:</p>
+            <h3 id="dev-notes-org">Code Organization</h3>
+            <p>The code is currently in a single C file. For future development, it should be split into multiple files for better organization:</p>
 <pre><code class="language-bash"><span class="bash-comment"># Recommended project structure</span>
 cinema_system/
 ├── src/
@@ -1252,109 +1280,137 @@ cinema_system/
 │   └── database.h
 │   └── utils.h
 └── data/</code></pre>
-                
-                <h3 id="dev-notes-standards">Coding Standards</h3>
-                 <ul>
-                    <li><strong>Naming Conventions:</strong> The code uses a mix of styles. A consistent style should be enforced, for example: <code>snake_case_for_functions_and_vars</code>, <code>PascalCaseForStructs</code>, <code>UPPER_CASE_FOR_CONSTANTS</code>.</li>
-                    <li><strong>UI and Visuals:</strong> The system leverages ANSI escape codes for color, providing clear visual feedback. The layout is standardized with headers and consistent prompts, creating a professional CLI experience. Tabular data is formatted for readability.</li>
-                    <li><strong>Comments:</strong> The code includes comments to explain the purpose of functions and complex logic blocks. For future work, Doxygen-style comments would be beneficial for automatic documentation generation.</li>
-                </ul>
-            </section>
             
-            <section id="conclusion">
-                <h2>Conclusion</h2>
-                <p>This documentation provides a complete and comprehensive overview of the JHS-CinePlex system. The project successfully implements a dual-role movie booking application in C, featuring a robust, user-friendly CLI with enhanced visuals and persistent data storage. It demonstrates strong programming fundamentals, modular design, and a clear focus on user experience. The outlined limitations and future improvements provide a clear roadmap for further development, making it an excellent foundation for a more advanced, production-ready application.</p>
-                <br>
-                <p><em>Documentation generated for JHS-CinePlex Movie Ticket Booking System.</em><br>
-                <em>CSE115 Semester Final Project</em></p>
-            </section>
-        </main>
-    </div>
+            <h3 id="dev-notes-standards">Coding Standards</h3>
+             <ul>
+                <li><strong>Naming Conventions:</strong> The code uses a mix of styles. A consistent style should be enforced, for example: <code>snake_case_for_functions_and_vars</code>, <code>PascalCaseForStructs</code>, <code>UPPER_CASE_FOR_CONSTANTS</code>.</li>
+                <li><strong>UI and Visuals:</strong> The system leverages ANSI escape codes for color, providing clear visual feedback. The layout is standardized with headers and consistent prompts, creating a professional CLI experience. Tabular data is formatted for readability.</li>
+                <li><strong>Comments:</strong> The code includes comments to explain the purpose of functions and complex logic blocks. For future work, Doxygen-style comments would be beneficial for automatic documentation generation.</li>
+            </ul>
+        </section>
+        
+        <section id="conclusion">
+            <h2>Conclusion</h2>
+            <p>This documentation provides a complete and comprehensive overview of the JHS-CinePlex system. The project successfully implements a dual-role movie booking application in C, featuring a robust, user-friendly CLI with enhanced visuals and persistent data storage. It demonstrates strong programming fundamentals, modular design, and a clear focus on user experience. The outlined limitations and future improvements provide a clear roadmap for further development, making it an excellent foundation for a more advanced, production-ready application.</p>
+            <br>
+            <p><em>Documentation generated for JHS-CinePlex Movie Ticket Booking System.</em><br>
+            <em>CSE115 Semester Final Project</em></p>
+        </section>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+    // --- MERMAID INITIALIZATION ---
+    mermaid.initialize({ 
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+            background: '#161b22',
+            mainBkg: '#161b22',
+            primaryColor: '#161b22',
+            primaryTextColor: '#c9d1d9',
+            lineColor: '#8b949e',
+            secondaryColor: '#0d1117',
+            tertiaryColor: '#161b22',
+            nodeBorder: '#58a6ff',
+            actorBorder: '#58a6ff'
+        }
+    });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const contentSections = document.querySelectorAll('.content section');
+        const navLinks = document.querySelectorAll('.sidebar nav a');
+        const mainNavItems = document.querySelectorAll('.sidebar nav > ul > li');
+        const toggleButton = document.getElementById('sidebar-toggle');
+        
+        // --- SIDEBAR VISIBILITY TOGGLE ---
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('sidebar-collapsed');
+        });
 
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    <script>
-        // --- MERMAID INITIALIZATION ---
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'dark',
-            themeVariables: {
-                background: '#161b22',
-                mainBkg: '#161b22',
-                primaryColor: '#161b22',
-                primaryTextColor: '#c9d1d9',
-                lineColor: '#8b949e',
-                secondaryColor: '#0d1117',
-                tertiaryColor: '#161b22',
-                nodeBorder: '#58a6ff',
-                actorBorder: '#58a6ff'
+        // --- MANUAL EXPAND/COLLAPSE ---
+        mainNavItems.forEach(item => {
+            const header = item.querySelector('div');
+            if (header) {
+                header.addEventListener('click', (e) => {
+                    // Prevent link navigation when clicking the div/icon
+                    if (e.target.classList.contains('toggle-icon') || e.target.tagName !== 'A') {
+                         item.classList.toggle('expanded');
+                    }
+                });
             }
         });
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            const contentSections = document.querySelectorAll('.content section');
-            const navLinks = document.querySelectorAll('.sidebar nav a');
-            const mainNavItems = document.querySelectorAll('.sidebar nav > ul > li');
-            const toggleButton = document.getElementById('sidebar-toggle');
-            
-            // --- SIDEBAR VISIBILITY TOGGLE ---
-            toggleButton.addEventListener('click', () => {
-                document.body.classList.toggle('sidebar-collapsed');
-            });
 
-            // --- MANUAL EXPAND/COLLAPSE ---
-            mainNavItems.forEach(item => {
-                const header = item.querySelector('div');
-                if (header) {
-                    header.addEventListener('click', (e) => {
-                        // Prevent link navigation when clicking the div/icon
-                        if (e.target.classList.contains('toggle-icon')) {
-                             item.classList.toggle('expanded');
-                        } else if (e.target.tagName !== 'A') {
-                             item.classList.toggle('expanded');
-                        }
-                    });
+        // --- FADE-IN ON SCROLL ---
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
             });
+        }, { root: null, rootMargin: '0px', threshold: 0.1 });
 
-            // --- FADE-IN ON SCROLL SCRIPT REMOVED TO ENSURE VISIBILITY ---
-            
-            // --- SCROLLSPY & AUTO EXPAND/COLLAPSE ---
-            const onScroll = () => {
-                let currentSectionId = '';
-                
-                // Find the current section in view
-                contentSections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (window.scrollY >= sectionTop - 120) {
-                        currentSectionId = section.getAttribute('id');
-                    }
-                });
-
-                // Update nav links highlighting
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').substring(1) === currentSectionId) {
-                        link.classList.add('active');
-                    }
-                });
-
-                // Auto-expand/collapse sidebar sections
-                const activeLink = document.querySelector('.sidebar nav a.active');
-                if (activeLink) {
-                    const activeParentLi = activeLink.closest('li[data-section]');
-                    mainNavItems.forEach(item => {
-                        if (item === activeParentLi) {
-                            item.classList.add('expanded');
-                        } else {
-                            item.classList.remove('expanded');
-                        }
-                    });
-                }
-            };
-            
-            window.addEventListener('scroll', onScroll);
-            onScroll(); // Run on load to set initial state
+        contentSections.forEach(section => {
+            sectionObserver.observe(section);
         });
-    </script>
+        
+        // --- SCROLLSPY & AUTO EXPAND/COLLAPSE ---
+        const onScroll = () => {
+            let currentSectionId = '';
+            
+            // Find the current section in view
+            contentSections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 120) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            // Update nav links highlighting
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === currentSectionId) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Auto-expand/collapse sidebar sections
+            const activeLink = document.querySelector('.sidebar nav a.active');
+            if (activeLink) {
+                const activeParentLi = activeLink.closest('li[data-section]');
+                mainNavItems.forEach(item => {
+                    if (item === activeParentLi) {
+                        item.classList.add('expanded');
+                    } else {
+                        // This part can be tricky. For a simple auto-collapse, you might do:
+                        // item.classList.remove('expanded');
+                    }
+                });
+            }
+        };
+        
+        window.addEventListener('scroll', onScroll);
+        onScroll(); // Run on load to set initial state
+    });
+</script>
+<button id="backToTopBtn" title="Go to top">↑</button>
+<script>
+// Show button on scroll
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    const btn = document.getElementById("backToTopBtn");
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        btn.style.display = "block";
+    } else {
+        btn.style.display = "none";
+    }
+}
+
+// Scroll to top
+document.getElementById("backToTopBtn").addEventListener("click", function(){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
 </body>
 </html>
