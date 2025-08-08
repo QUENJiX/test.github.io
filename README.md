@@ -1,7 +1,3 @@
-You are absolutely right. My sincere apologies for that oversight. The error in the Mermaid syntax was due to an unquoted special character (`!`), which caused the renderer to fail.
-
-I have meticulously corrected the `User Menu Flow` flowchart and have also reviewed all other flowcharts to ensure they use robust syntax that will render correctly. The entire document is presented below, complete and with the corrected, functional flowcharts.
-
 ---
 
 # JHS-CinePlex Documentation
@@ -237,57 +233,59 @@ The system maintains parallel arrays where the index `i` correlates related data
 
 ## Program Flowcharts
 
+These flowcharts provide a detailed visual representation of the program's logic, from the main application loop to the specific logic within each module.
+
 ### 1. Main Program Flow
 This chart illustrates the high-level structure of the application, including initialization, the main menu loop, and the shutdown procedure.
 ```mermaid
 graph TD
     subgraph Initialization
-        A[Start Program] --> B[call Read_Users()];
-        B --> C[call Read_Movies()];
-        C --> D[call Read_Tickets()];
+        A["Start Program"] --> B["call Read_Users()"];
+        B --> C["call Read_Movies()"];
+        C --> D["call Read_Tickets()"];
     end
 
-    subgraph MainLoop [Main Program Loop]
+    subgraph "Main Program Loop"
         direction LR
         D --> E{while(1)};
         E --> F["Display Main Menu\n(Admin, Customer, Exit)"];
         F --> G{User Choice?};
-        G -- 1. Admin --> H[call admin_panel()];
-        G -- 2. Customer --> I[call user_portal()];
+        G -- "1. Admin" --> H["call admin_panel()"];
+        G -- "2. Customer" --> I["call user_portal()"];
         H --> E;
         I --> E;
     end
 
     subgraph Shutdown
-        G -- 3. Exit --> J[call Write_Movies()];
-        J --> K[call Write_Tickets()];
-        K --> L[call Write_Users()];
+        G -- "3. Exit" --> J["call Write_Movies()"];
+        J --> K["call Write_Tickets()"];
+        K --> L["call Write_Users()"];
         L --> M["Print 'All data saved. Goodbye!'"];
     end
 
-    M --> N[End Program];
+    M --> N["End Program"];
 ```
 
 ### 2. Administrator Module Flow
 This chart details the entire workflow for an administrator, from login to performing various management tasks like adding, editing, and removing movies. The edit and remove processes now include the substring search logic.
 ```mermaid
 graph TD
-    A[Start admin_panel] --> B["Prompt for Admin\nUsername & Password"];
+    A["Start admin_panel"] --> B["Prompt for Admin\nUsername & Password"];
     B --> C{Credentials Valid?};
     C -- No --> D["print_error('Access denied')"];
-    D --> E[Return to Main Menu];
+    D --> E["Return to Main Menu"];
 
     C -- Yes --> F["print_success('Login successful')"];
     F --> G{Admin Loop};
-    G --> H[call show_admin_dashboard()];
+    G --> H["call show_admin_dashboard()"];
     H --> I["Display Admin Menu"];
     I --> J{Admin Choice?};
 
-    J -- 1. Add --> K[call admin_add_movie()];
+    J -- "1. Add" --> K["call admin_add_movie()"];
     K --> G;
 
     subgraph "Edit Movie Process"
-      J -- 2. Edit --> L["Prompt for search query"];
+      J -- "2. Edit" --> L["Prompt for search query"];
       L --> M["call find_movie_by_title_substr()"];
       M --> N{Movie Found?};
       N -- No --> O["print_error('Not found')"];
@@ -300,7 +298,7 @@ graph TD
     end
 
     subgraph "Remove Movie Process"
-      J -- 3. Remove --> T["Prompt for search query"];
+      J -- "3. Remove" --> T["Prompt for search query"];
       T --> U["call find_movie_by_title_substr()"];
       U --> V{Movie Found?};
       V -- No --> W["print_error('Not found')"];
@@ -316,35 +314,35 @@ graph TD
       AD --> G;
     end
 
-    J -- 4. View Movies --> AE[call view_available_movies()];
+    J -- "4. View Movies" --> AE["call view_available_movies()"];
     AE --> G;
-    J -- 5. View Purchases --> AF[call view_all_purchases()];
+    J -- "5. View Purchases" --> AF["call view_all_purchases()"];
     AF --> G;
-    J -- 6. Logout --> AG[Return to Main Menu];
+    J -- "6. Logout" --> AG["Return to Main Menu"];
 ```
 
 ### 3. User Menu Flow
 This diagram maps out the experience for a logged-in customer, detailing the process for viewing movies, viewing personal history, and the comprehensive, multi-step process of purchasing tickets.
 ```mermaid
 graph TD
-    A[Start user_menu] --> B{User Menu Loop};
+    A["Start user_menu"] --> B{User Menu Loop};
     B --> C["Display Personalized Menu\n'Welcome, [username]!'"];
     C --> D{User Choice?};
-    D -- 1. View Movies --> E[call view_available_movies()];
+    D -- "1. View Movies" --> E["call view_available_movies()"];
     E --> B;
 
     subgraph "Purchase Tickets Process"
-        D -- 2. Purchase --> F["List available movies"];
+        D -- "2. Purchase" --> F["List available movies"];
         F --> G["Prompt for movie number"];
         G --> H{Choice is 0 (Back)?};
         H -- Yes --> B;
         H -- No --> I{Seats > 0?};
         I -- No --> J["print_error('SOLD OUT')"] --> B;
         I -- Yes --> K["Prompt for ticket quantity"];
-        K --> L{Quantity valid?\n(>0 and <= available)};
+        K --> L{"Quantity valid?\n(>0 and <= available)"};
         L -- No --> M["print_error('Invalid count')"] --> B;
         L -- Yes --> N["Display Purchase Summary"];
-        N --> O{Confirm Purchase? (Y/N)};
+        N --> O{"Confirm Purchase? (Y/N)"};
         O -- No --> P["print_info('Cancelled')"] --> B;
         O -- Yes --> Q["Update available_Seats"];
         Q --> R["Add new record to all_purchases array"];
@@ -354,34 +352,34 @@ graph TD
         U --> B;
     end
 
-    D -- 3. View History --> V[call view_my_purchases()];
+    D -- "3. View History" --> V["call view_my_purchases()"];
     V --> B;
-    D -- 4. Logout --> W[Return to Customer Portal];
+    D -- "4. Logout" --> W["Return to Customer Portal"];
 ```
 
 ### 4. Authentication Flow
 This chart focuses on the `user_portal`, showing how a customer can navigate between the login and registration screens, and the logic that validates their actions.
 ```mermaid
 graph TD
-    A[Start user_portal] --> B{Authentication Loop};
+    A["Start user_portal"] --> B{Authentication Loop};
     B --> C["Display Menu\n(Login, Register, Back)"];
     C --> D{User Choice?};
-    D -- 3. Back --> E[Return to Main Menu];
+    D -- "3. Back" --> E["Return to Main Menu"];
 
     subgraph "Login Process"
-        D -- 1. Login --> F["Prompt for Username & Password"];
+        D -- "1. Login" --> F["Prompt for Username & Password"];
         F --> G["Search all_users array"];
-        G --> H{User found & Password matches?};
+        G --> H{"User found & Password matches?"};
         H -- No --> I["print_error('Invalid credentials')"];
         I --> B;
         H -- Yes --> J["print_success('Login successful')"];
-        J --> K[call user_menu(username)];
+        J --> K["call user_menu(username)"];
         K --> B;
     end
 
     subgraph "Registration Process"
-        D -- 2. Register --> L["Prompt for new Username"];
-        L --> M{Username is '0' (Cancel)?};
+        D -- "2. Register" --> L["Prompt for new Username"];
+        L --> M{"Username is '0' (Cancel)?"};
         M -- Yes --> B;
         M -- No --> N["Search all_users for username"];
         N --> O{Username already exists?};
@@ -400,24 +398,24 @@ graph TD
 This chart visualizes how the program interacts with the file system at the start and end of its execution, including the special case of creating default data if the movie file is missing.
 ```mermaid
 graph TD
-    A[Start Program] --> B[call Read_Users()];
-    B --> C[call Read_Movies()];
+    A["Start Program"] --> B["call Read_Users()"];
+    B --> C["call Read_Movies()"];
     subgraph "Read_Movies Logic"
-        C -- reads --> D{movie_list.txt exists?};
-        D -- No --> E[call Default_Movies()];
-        E --> F[call Write_Movies() to create file];
+        C -- reads --> D{"movie_list.txt exists?"};
+        D -- No --> E["call Default_Movies()"];
+        E --> F["call Write_Movies() to create file"];
         F --> H;
-        D -- Yes --> G[Load movie data from file into arrays];
+        D -- Yes --> G["Load movie data from file into arrays"];
         G --> H;
     end
-    H[Finished Reading Movies] --> I[call Read_Tickets()];
+    H["Finished Reading Movies"] --> I["call Read_Tickets()"];
     I --> J["Enter Main Program Loop\n(Application is running)"];
     J --> K{Exit Signal Received?};
     K -- No --> J;
-    K -- Yes --> L[call Write_Movies()];
-    L --> M[call Write_Tickets()];
-    M --> N[call Write_Users()];
-    N --> O[End Program];
+    K -- Yes --> L["call Write_Movies()"];
+    L --> M["call Write_Tickets()"];
+    M --> N["call Write_Users()"];
+    N --> O["End Program"];
 ```
 
 ## File I/O and Data Persistence
