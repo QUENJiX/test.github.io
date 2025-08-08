@@ -1,5 +1,6 @@
 
 ---
+
 # JHS-CinePlex Documentation
 ## JHS-CinePlex Movie Ticket Booking System
 ### CSE115 Semester Final Project Documentation
@@ -236,14 +237,14 @@ The system maintains parallel arrays where the index `i` correlates related data
 graph TD
     A[Start] --> B[Read Users, Movies, & Tickets Files];
     B --> C{Loop Forever};
-    C --> D[Clear Screen & Display Main Menu];
+    C --> D["Clear Screen & Display Main Menu"];
     D --> E{Enter Choice};
     E -->|1: Admin| F[Call admin_panel];
     E -->|2: Customer| G[Call user_portal];
     E -->|3: Exit| H[Call Write Users, Movies, & Tickets Files];
     F --> C;
     G --> C;
-    H --> I[Exit Program];
+    H --> I[End Program];
     E -->|Invalid| D;
 ```
 
@@ -252,7 +253,7 @@ graph TD
 graph TD
     A[Start admin_panel] --> B[Prompt for Admin Credentials];
     B --> C{Credentials Correct?};
-    C -->|No| D[Show Error & Return];
+    C -->|No| D["Show Error & Return"];
     C -->|Yes| E{Admin Loop};
     E --> F[Show Admin Dashboard];
     F --> G[Show Admin Menu];
@@ -274,7 +275,7 @@ graph TD
 ```mermaid
 graph TD
     A[Start user_portal] --> B{User Loop};
-    B --> C[Show Login/Register/Back Menu];
+    B --> C["Show 'Login/Register/Back' Menu"];
     C --> D{User Choice};
     D -->|1: Login| E[Call user_login];
     D -->|2: Register| F[Call user_register];
@@ -282,7 +283,7 @@ graph TD
     F --> B;
     E --> H{Login Successful?};
     H -->|Yes| I[Call user_menu with username];
-    H -->|No| J[Show Error & Pause];
+    H -->|No| J["Show Error & Pause"];
     I --> B;
     J --> B;
 ```
@@ -291,7 +292,7 @@ graph TD
 ```mermaid
 graph TD
     A[Start user_menu] --> B{User Menu Loop};
-    B --> C[Show User Menu (Welcome, User!)];
+    B --> C["Show User Menu (Welcome, User!)"];
     C --> D{User Choice};
     D -->|1: View Movies| E[Call view_available_movies];
     D -->|2: Purchase| F[Call purchase_tickets];
