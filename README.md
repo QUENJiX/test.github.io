@@ -234,7 +234,7 @@ The system relies on a parallel array structure where the index `i` correlates r
 This chart illustrates the high-level structure of the application.
 ```mermaid
 graph TD
-    A[Start Program] --> B[Load Data from Files (Users, Tickets, Movies)]
+    A[Start Program] --> B["Load Data from Files (Users, Tickets, Movies)"]
     B --> C{Display Main Menu};
     C --> D{Select Option};
     D -->|1. Admin| E[Execute admin_panel];
@@ -297,15 +297,16 @@ graph TD
 This chart details the specific, multi-step process of purchasing a ticket.
 ```mermaid
 graph TD
+    graph TD
     A[Start purchase_tickets] --> B[Display List of Movies]
     B --> C[User Selects Movie by Number]
-    C --> D{Is Movie Sold Out? (Seats == 0)}
+    C --> D{"Is Movie Sold Out? (Seats == 0)"}
     D -- Yes --> E[Show 'Sold Out' Error & Return]
     D -- No --> F[Prompt for Number of Tickets]
-    F --> G{Is Quantity Valid? ( > 0 and <= Available Seats)}
+    F --> G{"Is Quantity Valid? ( > 0 and <= Available Seats)"}
     G -- No --> H[Show Quantity Error & Return]
     G -- Yes --> I[Show Purchase Summary (Movie, Total Price)]
-    I --> J{User Confirms Purchase? (Y/N)}
+    I --> J{"User Confirms Purchase? (Y/N)"}
     J -- No --> K[Show 'Purchase Cancelled' & Return]
     J -- Yes --> L[Update Available Seats for Movie]
     L --> M[Create New Ticket Record in 'all_purchases' Array]
