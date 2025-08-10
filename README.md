@@ -234,91 +234,50 @@ The system relies on a parallel array structure where the index `i` correlates r
 This chart illustrates the high-level structure of the application.
 ```mermaid
 graph TD
-    A[Start Program] --> B["Load Data from Files (Users, Tickets, Movies)"]
-    B --> C{Display Main Menu};
-    C --> D{Select Option};
-    D -->|1. Admin| E[Execute admin_panel];
-    D -->|2. Customer| F[Execute user_portal];
-    D -->|3. Exit| G[Save All Data to Files];
-    E --> C;
-    F --> C;
-    G --> H[End Program];
+    A[Start Program] --> B[Initialize Data from Files]
+    B --> C[Display Main Menu]
+    C --> D{User Choice}
+    D -->|Admin Login| E[Admin Authentication]
+    D -->|Customer Portal| F[User Authentication Portal]
+    D -->|Exit| G[Save All Data to Files]
+    E --> H{Authentication Successful?}
+    H -->|Yes| I[Display Admin Dashboard & Menu Loop]
+    H -->|No| J[Show Error Message]
+    J --> C
+    I --> K{Admin Choice}
+    K -->|Add Movie| L[Admin Add Movie]
+    K -->|Edit Movie| M[Admin Edit Movie]
+    K -->|Remove Movie| N[Admin Remove Movie]
+    K -->|View Movies| O[View Available Movies]
+    K -->|View Purchases| P[View All Purchases]
+    K -->|Logout| C
+    L --> I
+    M --> I
+    N --> I
+    O --> I
+    P --> I
+    F --> Q{Portal Choice}
+    Q -->|Login| R[User Login]
+    Q -->|Register| S[User Registration]
+    Q -->|Back| C
+    R --> T{Login Successful?}
+    T -->|Yes| U[User Menu Loop]
+    T -->|No| V[Show Error Message]
+    V --> F
+    S --> W{Registration Valid?}
+    W -->|Yes| X[Show Success Message]
+    W -->|No| Y[Show Error Message]
+    X --> F
+    Y --> F
+    U --> Z{User Choice}
+    Z -->|View Movies| O
+    Z -->|Purchase Tickets| AA[Purchase Tickets]
+    Z -->|View History| AB[View My Purchases]
+    Z -->|Logout| F
+    AA --> U
+    AB --> U
+    G --> AC[Exit Program]
 ```
-
-### 2. Administrator Module Flow
-This chart details the workflow for an administrator.
-```mermaid
-graph TD
-    A[Start admin_panel] --> B[Prompt for Admin Credentials]
-    B --> C{Credentials Valid?};
-    C -- Invalid --> D[Show Error & Return to Main Menu];
-    C -- Valid --> E[Show Admin Dashboard & Menu];
-    E --> F{Select Option};
-    F -->|1. Add Movie| G[Execute admin_add_movie];
-    F -->|2. Edit Movie| H[Execute admin_edit_movie];
-    F -->|3. Remove Movie| I[Execute admin_remove_movie];
-    F -->|4. View Movies| J[Execute view_available_movies];
-    F -->|5. View Purchases| K[Execute view_all_purchases];
-    F -->|6. Logout| L[Return to Main Menu];
-    G --> E;
-    H --> E;
-    I --> E;
-    J --> E;
-    K --> E;
-```
-
-### 3. User Module Flow
-This diagram maps out the experience for a customer.
-```mermaid
-graph TD
-    subgraph User Portal
-        A[Start user_portal] --> B{Display Login/Register Menu}
-        B -->|1. Login| C[Execute user_login]
-        B -->|2. Register| D[Execute user_register]
-        B -->|3. Back| E[Return to Main Menu]
-        D --> A
-    end
-
-    subgraph User Menu
-        C -- Success --> F[Execute user_menu]
-        C -- Failure --> A
-        F --> G{Select Option}
-        G -->|1. View Movies| H[Execute view_available_movies]
-        G -->|2. Purchase Tickets| I[Execute purchase_tickets]
-        G -->|3. View History| J[Execute view_my_purchases]
-        G -->|4. Logout| A
-        H --> F
-        I --> F
-        J --> F
-    end
-```
-
-### 4. Ticket Purchase Flow
-This chart details the specific, multi-step process of purchasing a ticket.
-```mermaid
-graph TD
-    graph TD
-    A[Start purchase_tickets] --> B[Display List of Movies]
-    B --> C[User Selects Movie by Number]
-    C --> D{"Is Movie Sold Out? (Seats == 0)"}
-    D -- Yes --> E[Show 'Sold Out' Error & Return]
-    D -- No --> F[Prompt for Number of Tickets]
-    F --> G{"Is Quantity Valid? ( > 0 and <= Available Seats)"}
-    G -- No --> H[Show Quantity Error & Return]
-    G -- Yes --> I[Show Purchase Summary (Movie, Total Price)]
-    I --> J{"User Confirms Purchase? (Y/N)"}
-    J -- No --> K[Show 'Purchase Cancelled' & Return]
-    J -- Yes --> L[Update Available Seats for Movie]
-    L --> M[Create New Ticket Record in 'all_purchases' Array]
-    M --> N[Write Updated Movie & Ticket Data to Files]
-    N --> O[Display Formatted E-Ticket on Screen]
-    O --> P[Return to User Menu]
-```
-
-Of course. Adding a section on the development environment and how to run the code in VS Code is a great idea for making the documentation more practical for other developers.
-
-Here is the updated documentation with the new section, **"Development Environment and Execution Guide"**, integrated into the document. I have placed it after the "File I/O" section, as it serves as a practical guide for getting the program running.
-
 ---
 
 ## File I/O and Data Persistence
