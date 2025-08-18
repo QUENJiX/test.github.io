@@ -40,9 +40,8 @@ int main(){
 
     return 0;
 }
----
+```
 
----
 ```C
 #include <stdio.h>
 #include <stdlib.h>
@@ -158,7 +157,6 @@ void delete_student() {
     }
 }
 
----
 int main() {
     int choice;
 
@@ -204,4 +202,3 @@ int main() {
     return 0;
 }
 ```
----
