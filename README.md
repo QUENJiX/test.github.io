@@ -10,8 +10,10 @@ struct User {
 
 void registerUser();
 void loginUser();
-int usernameExists(const char* username);
-void clearInputBuffer();
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
 
 int main() {
     int choice;
@@ -26,7 +28,7 @@ int main() {
         if (scanf("%d", &choice) != 1) {
             printf("Invalid input. Please enter a number.\n");
             clearInputBuffer();
-            choice = 0;
+            choice = 0; 
             continue;
         }
         clearInputBuffer();
@@ -40,29 +42,6 @@ int main() {
         }
     } while (choice != 3);
 
-    return 0;
-}
-
-void clearInputBuffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
-
-int usernameExists(const char* username) {
-    FILE* file = fopen("users.txt", "r");
-    if (file == NULL) {
-        return 0;
-    }
-
-    struct User fileUser;
-    while (fscanf(file, "%s %s", fileUser.username, fileUser.password) == 2) {
-        if (strcmp(fileUser.username, username) == 0) {
-            fclose(file);
-            return 1;
-        }
-    }
-
-    fclose(file);
     return 0;
 }
 
@@ -83,12 +62,25 @@ void registerUser() {
         return;
     }
 
-    if (usernameExists(newUser.username)) {
+    int exists = 0;
+    FILE* file = fopen("users.txt", "r");
+    if (file != NULL) {
+        struct User fileUser;
+        while (fscanf(file, "%s %s", fileUser.username, fileUser.password) == 2) {
+            if (strcmp(fileUser.username, newUser.username) == 0) {
+                exists = 1;
+                break; 
+            }
+        }
+        fclose(file); 
+    }
+
+    if (exists) {
         printf("Error: Username already exists. Please choose another one.\n");
         return;
     }
 
-    FILE* file = fopen("users.txt", "a");
+    file = fopen("users.txt", "a");
     if (file == NULL) {
         printf("Error: Could not open file for writing.\n");
         return;
@@ -136,7 +128,6 @@ void loginUser() {
         printf("Invalid username or password!\n");
     }
 }
-
 ```
 
 ## Problem2
